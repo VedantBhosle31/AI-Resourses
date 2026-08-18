@@ -1,0 +1,3299 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{}
+\date{}
+
+\begin{document}
+
+\textbf{THE DEFINITIVE MASTER REFERENCE HANDBOOK FOR MACHINE LEARNING,
+DEEP LEARNING \& COMPUTER VISION}
+
+\emph{A Comprehensive One-Stop Pedagogical Guide to 66 Scikit-Learn
+Algorithms, Mathematical Formulations, Loss Functions, Error Metrics,
+Computer Vision Architectures, and Unsupervised Learning}
+
+\textbf{Edition 1.0 \textbar{} Complete Learning \& Professional
+Engineering Manual\\
+Includes Full Mathematical Derivations, Mental Models \& Architecture
+Flowcharts}
+
+\section{List of Abbreviations \& Acronyms
+Index}\label{list-of-abbreviations-acronyms-index}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Abbreviation}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Full Term}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Brief Description}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+AIC & Akaike Information Criterion & Model selection score balancing
+likelihood and parameter count \\
+AUC & Area Under the Curve & Aggregate measure of performance across all
+classification thresholds \\
+BCE & Binary Cross-Entropy & Log loss metric for binary 0/1 probability
+classification \\
+BIC & Bayesian Information Criterion & Model selection criterion with
+stronger penalty for parameters than AIC \\
+CCE & Categorical Cross-Entropy & Multi-class log loss over Softmax
+probability distributions \\
+CNN & Convolutional Neural Network & Deep network using spatial
+convolutions for visual grid processing \\
+CV & Cross-Validation & Resampling procedure to evaluate ML model
+generalization \\
+DBSCAN & Density-Based Spatial Clustering & Clustering algorithm based
+on dense neighborhood connectivity \\
+DETR & DEtection TRansformer & End-to-end object detector using
+Transformer encoder-decoder \\
+FCN & Fully Convolutional Network & CNN architecture for pixel-by-pixel
+semantic segmentation \\
+GMM & Gaussian Mixture Model & Probabilistic soft clustering model
+assuming Gaussian components \\
+GP & Gaussian Process & Non-parametric Bayesian probabilistic regression
+framework \\
+IoU & Intersection over Union & Overlap evaluation metric for bounding
+boxes and masks \\
+KDTree & k-Dimensional Tree & Space-partitioning data structure for fast
+nearest neighbor search \\
+KL & Kullback-Leibler & Relative entropy measuring divergence between
+probability distributions \\
+KNN & K-Nearest Neighbors & Instance-based non-parametric
+classifier/regressor \\
+LARS & Least Angle Regression & Stepwise forward feature selection
+algorithm \\
+LDA & Linear Discriminant Analysis & Linear supervised classification \&
+dimensionality reduction \\
+LOOCV & Leave-One-Out Cross-Validation & Cross-validation where fold
+size equals 1 sample \\
+MAE & Mean Absolute Error & Average absolute error distance \textbar y -
+y bar\textbar{} \\
+MAPE & Mean Absolute Percentage Error & Scale-independent relative error
+percentage \\
+MCC & Matthews Correlation Coefficient & Balanced correlation
+coefficient for binary classification \\
+MLP & Multi-Layer Perceptron & Classical feed-forward artificial neural
+network \\
+MSE & Mean Squared Error & Average squared prediction error distance (y
+- ŷ)² \\
+MSLE & Mean Squared Logarithmic Error & Relative logarithmic squared
+error metric \\
+OLS & Ordinary Least Squares & Linear regression minimizing sum of
+squared residuals \\
+OMP & Orthogonal Matching Pursuit & Greedy sparse signal approximation
+algorithm \\
+PCA & Principal Component Analysis & Unsupervised orthogonal variance
+dimensionality reduction \\
+QDA & Quadratic Discriminant Analysis & Generative classifier with
+class-specific covariance matrices \\
+RBF & Radial Basis Function & Gaussian kernel measuring Euclidean
+distance similarity \\
+RMSE & Root Mean Squared Error & Square root of MSE; error in original
+target units \\
+ROC & Receiver Operating Characteristic & Curve plotting True Positive
+Rate vs False Positive Rate \\
+RANSAC & RANdom SAmple Consensus & Iterative robust regressor resistant
+to heavy outliers \\
+SGD & Stochastic Gradient Descent & Iterative optimization using
+mini-batch sample gradients \\
+sMAPE & Symmetric MAPE & Symmetric relative percentage error metric
+bounded {[}0\%, 200\%{]} \\
+SMO & Sequential Minimal Optimization & Algorithm for fast quadratic
+optimization in SVMs \\
+SSD & Single Shot MultiBox Detector & Real-time one-stage object
+detection CNN \\
+SVC / SVR & Support Vector Classifier / Regressor & Maximum-margin
+hyperplane support vector machine \\
+t-SNE & t-Distributed Stochastic Neighbor Embedding & Non-linear
+manifold visualization technique \\
+UMAP & Uniform Manifold Approximation \& Projection & Fast non-linear
+manifold dimensionality reduction \\
+ViT & Vision Transformer & Transformer architecture applied directly to
+image patches \\
+WAPE & Weighted Absolute Percentage Error & Volume-weighted absolute
+percentage error metric \\
+YOLO & You Only Look Once & Real-time single-stage object detector \\
+\end{longtable}
+}
+
+\section{Chapter 1: Foundational Framework of Model Evaluation \& Error
+Metrics}\label{chapter-1-foundational-framework-of-model-evaluation-error-metrics}
+
+\subsection{1.1 Confusion Matrix Layout \&
+Formulations}\label{confusion-matrix-layout-formulations}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Actual Positive}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Actual Negative}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\textbf{Predicted Positive} &
+\begin{minipage}[t]{\linewidth}\raggedright
+TP (True Positive)\\
+Correctly identified positive class\strut
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+FP (False Positive)\\
+Type I Error - False Alarm\strut
+\end{minipage} \\
+\textbf{Predicted Negative} &
+\begin{minipage}[t]{\linewidth}\raggedright
+FN (False Negative)\\
+Type II Error - Missed Case\strut
+\end{minipage} & \begin{minipage}[t]{\linewidth}\raggedright
+TN (True Negative)\\
+Correctly identified negative class\strut
+\end{minipage} \\
+\end{longtable}
+}
+
+\subsection{1.2 Situation-to-Metric Selection
+Guide}\label{situation-to-metric-selection-guide}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Business / Modeling Situation}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Recommended Metric}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Key Reason / Focus}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Classes are balanced & Accuracy & Overall ratio of correct
+predictions \\
+False positives are expensive & Precision & Minimizes false alarms
+(e.g., spam filter) \\
+False negatives are expensive & Recall / Sensitivity & Minimizes missed
+critical cases (e.g., medical diagnosis) \\
+Need balance of Precision + Recall & F1 Score & Harmonic mean balancing
+FP and FN penalties \\
+Very imbalanced dataset & F1 / MCC / PR-AUC & Avoids accuracy inflation
+on majority class \\
+Need probability quality & Log Loss & Penalizes confident incorrect
+probability predictions \\
+Need threshold-independent ranking & ROC-AUC & Measures class separation
+ability across all thresholds \\
+Medical diagnosis & Recall + Specificity + ROC-AUC & Ensures high
+detection while tracking true negatives \\
+Image/object classification & Accuracy + F1 + Confusion Matrix &
+Comprehensively tracks per-class errors \\
+Multi-class classification & Macro F1 + Weighted F1 + Accuracy &
+Balances overall performance and minority classes \\
+\end{longtable}
+}
+
+\subsection{1.3 Classification Loss Functions \& Metrics
+Summary}\label{classification-loss-functions-metrics-summary}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Function Name}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Full Name / Variant}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Main Purpose}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Key Property \& Formula Note}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+BCE & Binary Cross Entropy & Binary classification & Penalizes wrong
+probability outputs for 0/1 target \\
+BCE with Logits & Binary CE with Logits & Binary classification directly
+from raw logits & More numerically stable (combines Sigmoid + BCE) \\
+Categorical CE & Categorical Cross Entropy & Multi-class classification
+& Requires one-hot encoded targets with Softmax \\
+Sparse Categorical CE & Sparse Categorical CE & Multi-class
+classification & Accepts integer class labels directly (memory
+efficient) \\
+Focal Loss & Focal Loss & Handles severe class imbalance & Down-weights
+easy examples with factor $(1-p)^{\gamma}$ \\
+Hinge Loss & Hinge Loss & SVM-style classification & Maximizes margin
+max(0, 1 - y·f(x)) for y ∈ \{-1, +1\} \\
+Squared Hinge Loss & Squared Hinge Loss & SVM-style classification &
+Quadratic penalty for margin violations {[}max(0, 1-y·f(x)){]}² \\
+KL Divergence & Kullback-Leibler Divergence & Probability distribution
+fitting & Measures divergence between predicted Q and true P \\
+Label Smoothing Loss & Label Smoothing CE & Prevents overconfident
+predictions & Softens hard 0/1 targets into 0.05/0.95 distributions \\
+\end{longtable}
+}
+
+\subsection{1.4 Regression Loss Functions \& Evaluation Metrics
+Summary}\label{regression-loss-functions-evaluation-metrics-summary}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Metric / Loss}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Full Name}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Range}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Best}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Main Purpose \& Key Property}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+MAE & Mean Absolute Error & 0--∞ & ↓ 0 & Average absolute error. Robust
+to outliers. \\
+MedAE & Median Absolute Error & 0--∞ & ↓ 0 & Median prediction error.
+Highly robust against extreme outliers. \\
+MSE & Mean Squared Error & 0--∞ & ↓ 0 & Penalizes large errors strongly
+(squared error). \\
+RMSE & Root Mean Squared Error & 0--∞ & ↓ 0 & Square root of MSE; error
+is in same units as target. \\
+R² & R-squared (Coeff. of Det.) & -∞ to 1 & ↑ 1 & Proportion of target
+variance explained by model. \\
+Adjusted R² & Adjusted R-squared & -∞ to 1 & ↑ 1 & R² penalized for
+adding non-informative feature variables. \\
+Explained Var. & Explained Variance Score & -∞ to 1 & ↑ 1 & Measures
+variation captured (ignores mean bias). \\
+MAPE & Mean Absolute \% Error & 0--∞\% & ↓ 0\% & Percentage-based error.
+Problematic when actual y ≈ 0. \\
+sMAPE & Symmetric MAPE & 0--200\% & ↓ 0\% & Symmetric percentage error;
+less sensitive to zero target issues. \\
+MSPE & Mean Squared \% Error & 0--∞ & ↓ 0 & Squared percentage error for
+severe relative penalty. \\
+MSLE & Mean Squared Log Error & 0--∞ & ↓ 0 & Penalizes relative
+log-scale error; useful for skewed targets. \\
+RMSLE & Root Mean Squared Log Error & 0--∞ & ↓ 0 & Root version of MSLE;
+reduces impact of large target scale. \\
+Huber Loss & Huber / Smooth L1 Loss & 0--∞ & ↓ 0 & Combines MSE (small
+errors) + MAE (large errors). Outlier-robust. \\
+Log-Cosh Loss & Logarithm of Hyperbolic Cosine & 0--∞ & ↓ 0 & Smooth
+robust loss, twice-differentiable everywhere. \\
+Quantile Loss & Pinball Loss & 0--∞ & ↓ 0 & Predicts specified
+percentiles (used for prediction intervals). \\
+Max Error & Maximum Error & 0--∞ & ↓ 0 & Captures the worst single
+prediction error in dataset. \\
+\end{longtable}
+}
+
+\section{Chapter 2: Classification Models \& Architectures (30
+Models)}\label{chapter-2-classification-models-architectures-30-models}
+
+\subsection{1. LinearSVC}\label{linearsvc}
+
+\subsubsection{Mental Model}\label{mental-model}
+
+Find a linear hyperplane that separates classes with the largest
+possible geometric margin.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction}
+
+\textbf{f(x) = w\^{}T * x + b\\
+\strut \\
+Prediction: y\_hat = +1 if f(x) \textgreater{} 0 else -1}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function}
+
+min\_\{w,b\} 0.5 * \textbar\textbar w\textbar\textbar² + C * Σ max(0, 1
+- y\_i * (w\^{}T * x\_i + b))²\\
+\strut \\
+The loss term is Squared Hinge Loss (or standard Hinge Loss).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart}
+
+\begin{quote}
+\textbf{\textbar\textbar w\textbar\textbar²\\
+↓\\
+}Keep boundary simple / maximize geometric margin
+
+\textbf{hinge loss\\
+↓\\
+}Punish incorrectly classified or insufficiently separated samples
+
+\textbf{C hyperparameter\\
+↓\\
+}Trade-off between wide margin and classification error
+\end{quote}
+
+\subsection{2. SGDClassifier}\label{sgdclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-1}
+
+Take a small sample or single data point, calculate the prediction
+error, and instantly update weights via gradient step.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-1}
+
+\textbf{General Objective: J(w) = (1/n) * Σ L(y\_i, f(x\_i)) + λ *
+R(w)\\
+\strut \\
+Single Step Update: w\_\{t+1\} = w\_t - η * ∇J(w\_t)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-1}
+
+Configurable loss L(y, f(x)):\\
+- L = Hinge (SVM)\\
+- L = Log loss (Logistic Regression)\\
+- L = Modified Huber (probabilistic SVM)\\
+\strut \\
+Regularization R(w): L2 norm 0.5*\textbar\textbar w\textbar\textbar², L1
+norm \textbar\textbar w\textbar\textbar\_1, or ElasticNet.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-1}
+
+\begin{quote}
+\textbf{prediction\\
+↓\\
+}Make quick output guess for current sample
+
+\textbf{calculate error\\
+↓\\
+}Compute loss value L(y\_i, y\_hat\_i)
+
+\textbf{calculate gradient\\
+↓\\
+}Compute gradient ∇J with respect to weight vector w
+
+\textbf{change weights\\
+↓\\
+}Update weights w\_\{t+1\} = w\_t - η * ∇J and repeat
+\end{quote}
+
+\subsection{3. MLPClassifier}\label{mlpclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-2}
+
+Stack multiple layers of artificial neurons to learn complex, non-linear
+feature representations automatically.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-2}
+
+\textbf{Single Neuron: z = w\^{}T * x + b, Activation: a = f(z)\\
+\strut \\
+Network Layers: h\_1 = f(W\_1 * x + b\_1), h\_2 = f(W\_2 * h\_1 + b\_2),
+y\_hat = Softmax(W\_3 * h\_2 + b\_3)\\
+\strut \\
+Softmax Probability: P(y=k\textbar x) = exp(z\_k) / Σ\_j exp(z\_j)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-2}
+
+Cross-Entropy Loss: L = - Σ y\_k * log(y\_hat\_k) + (α / 2n) * Σ
+\textbar\textbar W\_l\textbar\textbar\_F²\\
+\strut \\
+Training uses Backpropagation + Gradient Descent (Adam, L-BFGS, or SGD).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-2}
+
+\begin{quote}
+\textbf{input layer\\
+↓\\
+}Receive raw input feature vector x
+
+\textbf{hidden layers\\
+↓\\
+}Extract non-linear hierarchical feature embeddings
+
+\textbf{softmax output\\
+↓\\
+}Produce normalized probability distribution across classes
+
+\textbf{backprop\\
+↓\\
+}Propagate gradient error backwards to update weight matrices W\_l
+\end{quote}
+
+\subsection{4. Perceptron}\label{perceptron}
+
+\subsubsection{Mental Model}\label{mental-model-3}
+
+A single linear neuron that tests predictions and shifts its boundary
+weights only when it makes a mistake.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-3}
+
+\textbf{Prediction: y\_hat = sgn(w\^{}T * x + b)\\
+\strut \\
+Condition to update: If y\_i * (w\^{}T * x\_i + b) ≤ 0 (Misclassified)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-3}
+
+Update Rule:\\
+w ← w + η * y\_i * x\_i\\
+b ← b + η * y\_i
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-3}
+
+\begin{quote}
+\textbf{correct prediction\\
+↓\\
+}Do nothing (weights stay unchanged)
+
+\textbf{misclassified sample\\
+↓\\
+}Shift weight vector w in the direction of the error y\_i * x\_i
+
+\textbf{simple loop\\
+↓\\
+}Iterate until linear convergence or max iterations reached
+\end{quote}
+
+\subsection{5. LogisticRegression}\label{logisticregression}
+
+\subsubsection{Mental Model}\label{mental-model-4}
+
+Compute a linear score for a sample, then map it through a Sigmoid curve
+to output a clean class probability between 0 and 1.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-4}
+
+\textbf{Linear Score: z = w\^{}T * x + b\\
+\strut \\
+Sigmoid Function: P(y=1\textbar x) = σ(z) = 1 / (1 + exp(-z))}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-4}
+
+Binary Cross-Entropy Loss:\\
+L(w) = - (1/n) * Σ {[} y\_i * log(p\_i) + (1 - y\_i) * log(1 - p\_i) {]}
++ (1 / 2C) * \textbar\textbar w\textbar\textbar²\\
+\strut \\
+Optimized via L-BFGS, Newton-CG, or Liblinear.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-4}
+
+\begin{quote}
+\textbf{linear score z\\
+↓\\
+}Combine features linearly z = w\^{}T * x + b
+
+\textbf{sigmoid σ(z)\\
+↓\\
+}Squash z to probability scale {[}0, 1{]}
+
+\textbf{cross-entropy\\
+↓\\
+}Penalize confident wrong probability guesses exponentially
+
+\textbf{gradient descent\\
+↓\\
+}Adjust w to maximize log-likelihood of dataset
+\end{quote}
+
+\subsection{6. LogisticRegressionCV}\label{logisticregressioncv}
+
+\subsubsection{Mental Model}\label{mental-model-5}
+
+Fit Logistic Regression across multiple internal cross-validation folds
+to automatically discover the best regularization strength C.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-5}
+
+\textbf{P(y=1\textbar x) = σ(w\^{}T * x + b)\\
+\strut \\
+Validation Score: CV\_Score(C\_k) = (1/K) * Σ\_\{v=1\}\^{}K
+Accuracy\_val( C\_k, Fold\_v )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-5}
+
+Solves internal grid search over a grid of C values:\\
+C\^{}* = argmax\_\{C\_k\} CV\_Score(C\_k)\\
+\strut \\
+Final fit uses C\^{}* on the full dataset.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-5}
+
+\begin{quote}
+\textbf{C grid search\\
+↓\\
+}Test multiple regularization candidate values C
+
+\textbf{K-fold split\\
+↓\\
+}Evaluate out-of-fold cross-validation accuracy for each C
+
+\textbf{select optimal C*\\
+↓\\
+}Pick C* with maximum validation score
+
+\textbf{final model\\
+↓\\
+}Fit Logistic Regression using optimal C*
+\end{quote}
+
+\subsection{7. SVC (Support Vector
+Classifier)}\label{svc-support-vector-classifier}
+
+\subsubsection{Mental Model}\label{mental-model-6}
+
+Project data into higher-dimensional space using kernel functions where
+classes become linearly separable by a maximum-margin hyperplane.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-6}
+
+\textbf{Dual Decision Function: f(x) = sgn( Σ\_\{i ∈ SV\} α\_i * y\_i *
+K(x\_i, x) + b )\\
+\strut \\
+Kernels K(x\_i, x):\\
+- Linear: x\_i\^{}T * x\\
+- RBF: exp(-γ * \textbar\textbar x\_i - x\textbar\textbar²)\\
+- Poly: (γ * x\_i\^{}T * x + r)\^{}d}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-6}
+
+Dual Quadratic Optimization:\\
+max\_α Σ α\_i - 0.5 * Σ\_i Σ\_j α\_i * α\_j * y\_i * y\_j * K(x\_i,
+x\_j) s.t. 0 ≤ α\_i ≤ C, Σ α\_i * y\_i = 0\\
+\strut \\
+Solved using Sequential Minimal Optimization (SMO).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-6}
+
+\begin{quote}
+\textbf{kernel K(x, x\_i)\\
+↓\\
+}Compute non-linear similarity between samples in feature space
+
+\textbf{support vectors\\
+↓\\
+}Identify key boundary points where α\_i \textgreater{} 0
+
+\textbf{max margin boundary\\
+↓\\
+}Construct optimal separating boundary between classes
+\end{quote}
+
+\subsection{8. CalibratedClassifierCV}\label{calibratedclassifiercv}
+
+\subsubsection{Mental Model}\label{mental-model-7}
+
+Wrap an uncalibrated classifier (like SVM or Naive Bayes) and pass its
+scores through a secondary mapping to output accurate, reliable
+probabilities.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-7}
+
+\textbf{Platt Scaling (Sigmoid): P(y=1\textbar f) = 1 / (1 + exp(A *
+f(x) + B))\\
+\strut \\
+Isotonic Regression: P(y=1\textbar f) = g(f(x)) where g is
+non-decreasing step function}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-7}
+
+Fits parameters A, B via Maximum Likelihood on validation fold scores
+f(x), or fits isotonic step curve g to minimize squared probability
+error.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-7}
+
+\begin{quote}
+\textbf{base model f(x)\\
+↓\\
+}Get uncalibrated confidence score / distance f(x)
+
+\textbf{calibration map\\
+↓\\
+}Pass f(x) through Sigmoid curve (Platt) or Monotonic step (Isotonic)
+
+\textbf{calibrated P(y\textbar x)\\
+↓\\
+}Output true calibrated probability reflecting real-world frequencies
+\end{quote}
+
+\subsection{9.
+PassiveAggressiveClassifier}\label{passiveaggressiveclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-8}
+
+Be passive (do nothing) if a sample is correctly classified with margin;
+become aggressive (make huge step update) if error occurs.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-8}
+
+\textbf{Hinge Loss: L\_t = max(0, 1 - y\_t * (w\_t\^{}T * x\_t))\\
+\strut \\
+Weight Update: w\_\{t+1\} = w\_t + τ\_t * y\_t * x\_t}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-8}
+
+Step Size Tau: τ\_t = min(C, L\_t /
+\textbar\textbar x\_t\textbar\textbar²)\\
+\strut \\
+Optimizes constrained distance minimization \textbar\textbar w -
+w\_t\textbar\textbar² subject to linear loss constraint.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-8}
+
+\begin{quote}
+\textbf{sample correct (L\_t=0)\\
+↓\\
+}Passive mode: Keep weights w\_\{t+1\} = w\_t
+
+\textbf{sample error (L\_t\textgreater0)\\
+↓\\
+}Aggressive mode: Update weights proportional to loss L\_t
+
+\textbf{C bound\\
+↓\\
+}Clip step size τ\_t by C to prevent noisy over-corrections
+\end{quote}
+
+\subsection{10. LabelPropagation}\label{labelpropagation}
+
+\subsubsection{Mental Model}\label{mental-model-9}
+
+Build a similarity graph of all data points and let known class labels
+flow along graph edges to label unlabeled points.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-9}
+
+\textbf{Graph Weight: W\_\{ij\} = exp(-γ * \textbar\textbar x\_i -
+x\_j\textbar\textbar²)\\
+\strut \\
+Label Transition: Y\_\{t+1\} = D\^{}\{-1\} * W * Y\_t}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-9}
+
+Iteratively multiplies probability label matrix Y by normalized
+transition matrix D\^{}\{-1\}W, then clamps (resets) known labeled nodes
+back to their true values.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-9}
+
+\begin{quote}
+\textbf{similarity graph\\
+↓\\
+}Connect data points with weights based on distance RBF kernel
+
+\textbf{label diffusion\\
+↓\\
+}Propagate label distribution from labeled to unlabeled nodes
+
+\textbf{hard clamping\\
+↓\\
+}Reset original ground-truth labels after each iteration until
+convergence
+\end{quote}
+
+\subsection{11. LabelSpreading}\label{labelspreading}
+
+\subsubsection{Mental Model}\label{mental-model-10}
+
+Propagate labels smoothly over a normalized graph Laplacian while
+allowing soft noise adjustments on original labels.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-10}
+
+\textbf{Symmetric Normalized Graph: S = D\^{}\{-1/2\} * W *
+D\^{}\{-1/2\}\\
+\strut \\
+Iterative Update: Y\_\{t+1\} = α * S * Y\_t + (1 - α) * Y\_0}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-10}
+
+Closed-Form Solution:\\
+Y\^{}* = (1 - α) * (I - α * S)\^{}\{-1\} * Y\_0\\
+\strut \\
+α parameter balances graph smoothness versus initial label retention.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-10}
+
+\begin{quote}
+\textbf{normalized graph S\\
+↓\\
+}Scale graph weights symmetrically to avoid degree bias
+
+\textbf{soft clamping α\\
+↓\\
+}Blend graph consensus (α) with original labels (1-α)
+
+\textbf{closed-form Y*\\
+↓\\
+}Solve exact steady-state label equilibrium matrix directly
+\end{quote}
+
+\subsection{12. RandomForestClassifier}\label{randomforestclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-11}
+
+Grow a forest of diverse decision trees on random data subsets and
+random feature splits, then combine their votes.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-11}
+
+\textbf{Tree Vote: P\_m(y=c\textbar x) from m-th tree trained on
+Bootstrap Sample B\_m\\
+\strut \\
+Forest Output: P(y=c\textbar x) = (1/M) * Σ\_\{m=1\}\^{}M
+P\_m(y=c\textbar x)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-11}
+
+Each tree node selects optimal split by sampling a random feature subset
+of size max\_features (√D) and maximizing Gini Gain ΔI\_G = I\_G(parent)
+- {[} (N\_L/N) I\_G(L) + (N\_R/N) I\_G(R) {]}.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-11}
+
+\begin{quote}
+\textbf{bootstrap sampling\\
+↓\\
+}Train each tree on a random sample with replacement
+
+\textbf{feature randomization\\
+↓\\
+}At each split node, search only a random subset of features
+
+\textbf{deep trees\\
+↓\\
+}Grow unpruned trees to capture complex interactions
+
+\textbf{majority vote\\
+↓\\
+}Average predictions to reduce variance drastically
+\end{quote}
+
+\subsection{13.
+GradientBoostingClassifier}\label{gradientboostingclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-12}
+
+Build decision trees sequentially, where each new tree focuses on
+correcting the specific errors (pseudo-residuals) of the previous
+ensemble.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-12}
+
+\textbf{Ensemble Prediction: F\_m(x) = F\_\{m-1\}(x) + ν * γ\_m *
+h\_m(x)\\
+\strut \\
+Pseudo-Residual: r\_\{i,m\} = - {[} ∂L(y\_i, F(x\_i)) / ∂F(x\_i)
+{]}\_\{F=F\_\{m-1\}\}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-12}
+
+Fits tree h\_m(x) to negative loss gradient r\_\{i,m\} using log-loss
+deviance, then scales by learning rate ν.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-12}
+
+\begin{quote}
+\textbf{current model F\_\{m-1\}\\
+↓\\
+}Generate predictions for all training samples
+
+\textbf{compute residuals r\_m\\
+↓\\
+}Calculate negative gradient direction of loss function
+
+\textbf{fit new tree h\_m\\
+↓\\
+}Train tree to predict error residuals r\_m
+
+\textbf{add with shrinkage ν\\
+↓\\
+}Update F\_m(x) = F\_\{m-1\}(x) + ν * h\_m(x) to prevent overfitting
+\end{quote}
+
+\subsection{14.
+QuadraticDiscriminantAnalysis}\label{quadraticdiscriminantanalysis}
+
+\subsubsection{Mental Model}\label{mental-model-13}
+
+Model each class as a separate multivariate Gaussian distribution with
+its own unique covariance matrix, creating quadratic decision
+boundaries.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-13}
+
+\textbf{Discriminant Score:\\
+δ\_k(x) = -0.5 * log\textbar Σ\_k\textbar{} - 0.5 * (x - μ\_k)\^{}T *
+Σ\_k\^{}\{-1\} * (x - μ\_k) + log(P(Y=k))}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-13}
+
+Maximum Likelihood Estimation:\\
+Estimates class means μ\_k, class covariance matrices Σ\_k, and prior
+probabilities P(Y=k) directly from data.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-13}
+
+\begin{quote}
+\textbf{class mean μ\_k\\
+↓\\
+}Find average center location of class k
+
+\textbf{covariance Σ\_k\\
+↓\\
+}Fit class-specific shape, spread, and orientation matrix
+
+\textbf{quadratic boundary\\
+↓\\
+}Compare quadratic distance scores and pick max δ\_k(x)
+\end{quote}
+
+\subsection{15.
+HistGradientBoostingClassifier}\label{histgradientboostingclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-14}
+
+Discretize continuous features into integer bins to compute gradient
+histograms instantly, speeding up gradient boosting exponentially.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-14}
+
+\textbf{Binning Transformation: x\_\{binned\} = QuantileBin(x,
+max\_bins=255)\\
+\strut \\
+Histogram Gradient: G\_bin = Σ\_\{i ∈ Bin\} g\_i, H\_bin = Σ\_\{i ∈
+Bin\} h\_i}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-14}
+
+Evaluates split thresholds over 256 discrete bins instead of sorting all
+individual sample values, reducing complexity from O(N log N) to
+O(max\_bins).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-14}
+
+\begin{quote}
+\textbf{255 quantile bins\\
+↓\\
+}Group continuous numbers into 256 integer buckets
+
+\textbf{gradient histogram\\
+↓\\
+}Sum first (g\_i) and second (h\_i) derivatives per bin
+
+\textbf{instant split search\\
+↓\\
+}Scan 256 bin boundaries to find best split threshold
+
+\textbf{super fast boosting\\
+↓\\
+}Train gradient boosted trees 10x-100x faster
+\end{quote}
+
+\subsection{16. RidgeClassifierCV}\label{ridgeclassifiercv}
+
+\subsubsection{Mental Model}\label{mental-model-15}
+
+Cast classification as a multi-target linear regression with L2
+regularization and tune parameter α via fast analytical Leave-One-Out
+Cross-Validation.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-15}
+
+\textbf{Target Encoding: Y ∈ \{-1, +1\}\^{}\{N × C\}\\
+\strut \\
+Prediction: y\_hat = argmax\_c ( w\_c\^{}T * x + b\_c )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-15}
+
+Analytical LOOCV Error:\\
+α\^{}* = argmin\_\{α\_k\} (1/n) * Σ {[} (y\_i - y\_hat\_\{-i\}(α\_k))²
+{]}\\
+\strut \\
+Computed instantly via SVD matrix decomposition without retraining.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-15}
+
+\begin{quote}
+\textbf{label matrix Y\\
+↓\\
+}Convert labels to -1/+1 multi-column indicators
+
+\textbf{SVD decomposition\\
+↓\\
+}Decompose feature matrix X = U Σ V\^{}T once
+
+\textbf{instant LOOCV score\\
+↓\\
+}Evaluate validation error for all α values simultaneously
+
+\textbf{select best α*\\
+↓\\
+}Pick optimal α* and compute final classifier weights
+\end{quote}
+
+\subsection{17. RidgeClassifier}\label{ridgeclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-16}
+
+Convert classification target labels to binary indicator numbers, fit a
+Ridge regression model, and pick the class with the highest score.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-16}
+
+\textbf{Indicator Matrix: Y ∈ \{-1, +1\}\^{}\{N × C\}\\
+\strut \\
+Weight Solution: w = (X\^{}T * X + α * I)\^{}\{-1\} * X\^{}T * Y}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-16}
+
+Prediction Rule:\\
+y\_hat = argmax\_c ( w\_c\^{}T * x + b\_c )\\
+\strut \\
+Minimizes squared indicator error with L2 penalty.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-16}
+
+\begin{quote}
+\textbf{convert targets\\
+↓\\
+}Map class labels to -1/+1 columns
+
+\textbf{closed-form matrix\\
+↓\\
+}Solve w = (X\^{}T X + α I)\^{}\{-1\} X\^{}T Y in one step
+
+\textbf{argmax decision\\
+↓\\
+}Output class corresponding to highest continuous linear output
+\end{quote}
+
+\subsection{18. AdaBoostClassifier}\label{adaboostclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-17}
+
+Combine weak decision stumps sequentially by boosting weights of
+misclassified samples after each round.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-17}
+
+\textbf{Ensemble Output: H(x) = sgn( Σ\_\{m=1\}\^{}M α\_m * h\_m(x) )\\
+\strut \\
+Learner Weight: α\_m = 0.5 * log( (1 - e\_m) / e\_m )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-17}
+
+Sample Weight Update:\\
+w\_\{i, m+1\} = w\_\{i, m\} * exp( - α\_m * y\_i * h\_m(x\_i) ),
+normalized so Σ w\_i = 1.\\
+\strut \\
+Implicitly minimizes Exponential Loss L(y, f(x)) = exp(-y * f(x)).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-17}
+
+\begin{quote}
+\textbf{train weak stump\\
+↓\\
+}Fit simple 1-split tree h\_m on weighted data
+
+\textbf{calculate error e\_m\\
+↓\\
+}Compute weighted error rate of weak learner
+
+\textbf{compute α\_m\\
+↓\\
+}Assign voting weight α\_m to current stump based on accuracy
+
+\textbf{re-weight samples\\
+↓\\
+}Increase weights of misclassified data points for next stump
+\end{quote}
+
+\subsection{19. ExtraTreesClassifier}\label{extratreesclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-18}
+
+Build a forest of trees using random split thresholds for candidate
+features to maximize randomness and lower model variance.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-18}
+
+\textbf{Split Threshold: t\_j \textasciitilde{} Uniform(min(x\_j),
+max(x\_j)) across random feature subset}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-18}
+
+Computes impurity gain for randomly drawn thresholds instead of
+searching for the exact mathematical optimum split point, reducing
+variance and computation time.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-18}
+
+\begin{quote}
+\textbf{random features\\
+↓\\
+}Select random subset of features at each node
+
+\textbf{random thresholds\\
+↓\\
+}Draw random split threshold t\_j uniformly within range
+
+\textbf{pick best random split\\
+↓\\
+}Choose the best among the random candidates
+
+\textbf{forest voting\\
+↓\\
+}Average votes across trees to lower prediction variance
+\end{quote}
+
+\subsection{20. KNeighborsClassifier}\label{kneighborsclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-19}
+
+Store all training data and classify a new point based on the majority
+vote of its K closest neighbors in feature space.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-19}
+
+\textbf{Distance Metric: d(x, z) = ( Σ \textbar x\_j - z\_j\textbar\^{}p
+)\^{}\{1/p\}\\
+\strut \\
+Class Probability: P(Y=c\textbar x) = (1/K) * Σ\_\{i ∈ N\_K(x)\} I(y\_i
+= c)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-19}
+
+Lazy Learning (No explicit training phase).\\
+Search Acceleration: Uses KDTree or BallTree index structures to find
+nearest points fast.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-19}
+
+\begin{quote}
+\textbf{store samples\\
+↓\\
+}Keep training vectors in memory (or tree index)
+
+\textbf{find K neighbors\\
+↓\\
+}Compute distance to all points and select K closest
+
+\textbf{vote / average\\
+↓\\
+}Count class labels among K neighbors and predict majority class
+\end{quote}
+
+\subsection{21. BaggingClassifier}\label{baggingclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-20}
+
+Train multiple copies of a base model on random bootstrap subsets of
+data and average their predictions to reduce model variance.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-20}
+
+\textbf{Bootstrap Samples: B\_1, B\_2, ..., B\_M drawn with replacement
+from dataset X\\
+\strut \\
+Ensemble Output: f\_\{bag\}(x) = Mode( h\_1(x), h\_2(x), ..., h\_M(x) )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-20}
+
+Fits base estimator h\_m independently on each bootstrap subset B\_m.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-20}
+
+\begin{quote}
+\textbf{create M subsets\\
+↓\\
+}Draw M bootstrap random samples with replacement
+
+\textbf{fit M base models\\
+↓\\
+}Train independent base model on each subset
+
+\textbf{combine predictions\\
+↓\\
+}Take majority vote / average probability across models
+\end{quote}
+
+\subsection{22. BernoulliNB}\label{bernoullinb}
+
+\subsubsection{Mental Model}\label{mental-model-21}
+
+Calculate class probabilities assuming binary boolean features (0 or 1)
+that are independent given the class label.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-21}
+
+\textbf{Likelihood: P(x\textbar Y=c) = ∏\_\{j=1\}\^{}D {[}
+p\_\{cj\}\^{}\{x\_j\} * (1 - p\_\{cj\})\^{}\{(1 - x\_j)\} {]}\\
+\strut \\
+Probability Parameter: p\_\{cj\} = (N\_\{c,j\} + α) / (N\_c + 2α)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-21}
+
+Decision Rule: y\_hat = argmax\_c {[} log P(Y=c) + Σ log
+P(x\_j\textbar Y=c) {]}\\
+\strut \\
+Uses Laplace smoothing α to prevent zero probability issues.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-21}
+
+\begin{quote}
+\textbf{binarize features\\
+↓\\
+}Check feature presence (x\_j=1) or absence (x\_j=0)
+
+\textbf{count frequencies\\
+↓\\
+}Calculate class probability p\_\{cj\} for each feature
+
+\textbf{naive bayes rule\\
+↓\\
+}Multiply probabilities assuming conditional independence
+\end{quote}
+
+\subsection{23.
+LinearDiscriminantAnalysis}\label{lineardiscriminantanalysis}
+
+\subsubsection{Mental Model}\label{mental-model-22}
+
+Project data onto a lower-dimensional axis that maximizes class
+separation relative to within-class variance, assuming shared
+covariance.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-22}
+
+\textbf{Linear Discriminant Function:\\
+δ\_k(x) = x\^{}T * Σ\^{}\{-1\} * μ\_k - 0.5 * μ\_k\^{}T * Σ\^{}\{-1\} *
+μ\_k + log(P(Y=k))}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-22}
+
+Assumes shared covariance matrix Σ across all classes, resulting in
+linear decision hyperplanes w\_k\^{}T * x + b\_k.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-22}
+
+\begin{quote}
+\textbf{shared covariance Σ\\
+↓\\
+}Pool feature variances across all classes
+
+\textbf{calculate means μ\_k\\
+↓\\
+}Find average feature vector per class
+
+\textbf{linear decision surface\\
+↓\\
+}Separate classes with linear hyperplane boundaries
+\end{quote}
+
+\subsection{24. GaussianNB}\label{gaussiannb}
+
+\subsubsection{Mental Model}\label{mental-model-23}
+
+Assume continuous features within each class follow bell-shaped Gaussian
+distributions and combine their probabilities independently.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-23}
+
+\textbf{Gaussian Likelihood:\\
+P(x\_j \textbar{} Y=c) = (1 / √(2π * σ\_\{cj\}²)) * exp( - (x\_j -
+μ\_\{cj\})² / (2 * σ\_\{cj\}²) )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-23}
+
+Estimates mean μ\_\{cj\} and variance σ\_\{cj\}² for each feature j per
+class c using Maximum Likelihood.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-23}
+
+\begin{quote}
+\textbf{fit gaussian curve\\
+↓\\
+}Compute mean μ and variance σ² per feature per class
+
+\textbf{compute probability\\
+↓\\
+}Evaluate Gaussian likelihood P(x\_j\textbar c) for input value
+
+\textbf{bayes rule decision\\
+↓\\
+}Multiply feature likelihoods with class priors P(c)
+\end{quote}
+
+\subsection{25. NuSVC}\label{nusvc}
+
+\subsubsection{Mental Model}\label{mental-model-24}
+
+Control SVM margin errors directly using parameter ν (nu) which bounds
+the fraction of support vectors and margin violations.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-24}
+
+\textbf{Primal Optimization:\\
+min\_\{w,b,ξ,ρ\} 0.5 * \textbar\textbar w\textbar\textbar² - ν * ρ +
+(1/n) * Σ ξ\_i s.t. y\_i * (w\^{}T φ(x\_i) + b) ≥ ρ - ξ\_i}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-24}
+
+Parameter ν ∈ (0, 1{]} automatically sets an upper bound on margin error
+fraction and lower bound on support vector count.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-24}
+
+\begin{quote}
+\textbf{nu parameter ν\\
+↓\\
+}Set target percentage of allowed margin errors
+
+\textbf{flexible margin ρ\\
+↓\\
+}Dynamically adjust margin width parameter ρ
+
+\textbf{SMO solver\\
+↓\\
+}Solve dual QP formulation via LIBSVM
+\end{quote}
+
+\subsection{26. DecisionTreeClassifier}\label{decisiontreeclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-25}
+
+Ask a series of binary yes/no questions on features to recursively split
+data into increasingly pure class regions.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-25}
+
+\textbf{Node Impurity I(A):\\
+- Gini: 1 - Σ p\_k²\\
+- Entropy: - Σ p\_k * log2(p\_k)\\
+\strut \\
+Information Gain: ΔI = I(Parent) - {[} (N\_L/N) I(L) + (N\_R/N) I(R)
+{]}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-25}
+
+Finds feature j and split threshold t maximizing Information Gain ΔI
+recursively until stopping criteria are met.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-25}
+
+\begin{quote}
+\textbf{evaluate all splits\\
+↓\\
+}Test feature thresholds to find maximum purity increase
+
+\textbf{split node\\
+↓\\
+}Divide data into left and right child nodes
+
+\textbf{repeat recursively\\
+↓\\
+}Continue splitting until leaf nodes are pure or max depth reached
+\end{quote}
+
+\subsection{27. NearestCentroid}\label{nearestcentroid}
+
+\subsubsection{Mental Model}\label{mental-model-26}
+
+Represent each class by its mean center vector (centroid) and assign new
+samples to the closest centroid.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-26}
+
+\textbf{Class Centroid: μ\_c = (1 / N\_c) * Σ\_\{i: y\_i = c\} x\_i\\
+\strut \\
+Prediction: y\_hat = argmin\_c d(x, μ\_c)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-26}
+
+Calculates Euclidean or Manhattan distance to each class mean vector
+μ\_c.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-26}
+
+\begin{quote}
+\textbf{calculate centroids\\
+↓\\
+}Compute average center point μ\_c for each class
+
+\textbf{measure distance\\
+↓\\
+}Calculate distance from sample x to all centroids
+
+\textbf{assign class\\
+↓\\
+}Pick class label of the closest centroid
+\end{quote}
+
+\subsection{28. ExtraTreeClassifier}\label{extratreeclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-27}
+
+Build a single extremely randomized decision tree where candidate split
+thresholds are drawn completely at random.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-27}
+
+\textbf{Split Threshold: t\_j \textasciitilde{} Uniform(min(x\_j),
+max(x\_j))}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-27}
+
+Selects random split thresholds for candidate features and picks the
+best among them, speeding up tree construction.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-27}
+
+\begin{quote}
+\textbf{draw random t\_j\\
+↓\\
+}Pick random split threshold for candidate features
+
+\textbf{evaluate impurity\\
+↓\\
+}Compute Gini impurity for random threshold splits
+
+\textbf{split \& repeat\\
+↓\\
+}Split data fast with lower computational overhead
+\end{quote}
+
+\subsection{29. CheckingClassifier}\label{checkingclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-28}
+
+An internal diagnostic test model used to check Scikit-Learn estimator
+API compliance and data input formatting.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-28}
+
+\textbf{Internal API Check: Validate X shape, y format, and fit/predict
+method signatures.}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-28}
+
+Performs no real ML training; verifies estimator contract during
+automated testing.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-28}
+
+\begin{quote}
+\textbf{receive input X, y\\
+↓\\
+}Accept data arrays
+
+\textbf{validate contract\\
+↓\\
+}Check API compatibility and parameter constraints
+
+\textbf{return mock output\\
+↓\\
+}Provide mock test response
+\end{quote}
+
+\subsection{30. DummyClassifier}\label{dummyclassifier}
+
+\subsubsection{Mental Model}\label{mental-model-29}
+
+Make simple non-smart baseline predictions (like always predicting the
+majority class) to benchmark real ML model uplift.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-29}
+
+\textbf{Strategy \textquotesingle most\_frequent\textquotesingle:
+P(y=c\textbar x) = 1 if c = Mode(Y) else 0\\
+\strut \\
+Strategy \textquotesingle stratified\textquotesingle: P(y=c\textbar x) =
+Prior(c) = N\_c / N}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-29}
+
+Computes simple summary statistics on target labels Y without looking at
+input features X.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-29}
+
+\begin{quote}
+\textbf{ignore features X\\
+↓\\
+}Do not inspect input feature values
+
+\textbf{calculate label stat\\
+↓\\
+}Count class frequencies in training targets Y
+
+\textbf{predict baseline\\
+↓\\
+}Output majority class or random prior distribution
+\end{quote}
+
+\section{Chapter 3: Regression Models \& Architectures (36
+Models)}\label{chapter-3-regression-models-architectures-36-models}
+
+\subsection{31. SVR}\label{svr}
+
+\subsubsection{Mental Model}\label{mental-model-30}
+
+Fit a prediction tube around data points where errors within threshold ε
+are completely ignored, penalizing only points outside.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-30}
+
+\textbf{Dual Function: f(x) = Σ\_\{i ∈ SV\} (α\_i - α\_i\^{}*) * K(x\_i,
+x) + b\\
+\strut \\
+ε-Insensitive Loss: L\_ε(y, f(x)) = max(0, \textbar y - f(x)\textbar{} -
+ε)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-30}
+
+min\_\{w,b,ξ,ξ\^{}*\} 0.5 * \textbar\textbar w\textbar\textbar² + C * Σ
+(ξ\_i + ξ\_i\^{}*)\\
+s.t. \textbar y\_i - (w\^{}T φ(x\_i) + b)\textbar{} ≤ ε + ξ\_i
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-30}
+
+\begin{quote}
+\textbf{insensitive tube ε\\
+↓\\
+}Ignore small errors falling within distance ε of tube
+
+\textbf{slack variables ξ\_i\\
+↓\\
+}Penalize points falling outside the ε-tube linearly
+
+\textbf{C parameter\\
+↓\\
+}Control trade-off between tube smoothness and error penalty
+\end{quote}
+
+\subsection{32. RandomForestRegressor}\label{randomforestregressor}
+
+\subsubsection{Mental Model}\label{mental-model-31}
+
+Grow multiple regression trees on random data samples and average their
+continuous predictions to reduce model variance.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-31}
+
+\textbf{Tree Output: T\_m(x) for m-th regression tree\\
+\strut \\
+Ensemble Output: f(x) = (1/M) * Σ\_\{m=1\}\^{}M T\_m(x)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-31}
+
+Node Split Criterion: Minimizes Variance / MSE\\
+Split Loss = Σ\_\{i ∈ Left\} (y\_i - c\_1)² + Σ\_\{i ∈ Right\} (y\_i -
+c\_2)²
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-31}
+
+\begin{quote}
+\textbf{bootstrap samples\\
+↓\\
+}Train trees on independent random data subsets
+
+\textbf{feature subsets\\
+↓\\
+}Select random feature candidate subsets at each split node
+
+\textbf{average predictions\\
+↓\\
+}Average tree outputs to produce smooth continuous predictions
+\end{quote}
+
+\subsection{33. ExtraTreesRegressor}\label{extratreesregressor}
+
+\subsubsection{Mental Model}\label{mental-model-32}
+
+Average predictions across regression trees built with completely random
+split thresholds for candidate features.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-32}
+
+\textbf{Split Threshold: t\_j \textasciitilde{} Uniform(min(x\_j),
+max(x\_j))\\
+\strut \\
+Ensemble Prediction: f(x) = (1/M) * Σ\_\{m=1\}\^{}M T\_m(x)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-32}
+
+Evaluates random split thresholds to reduce tree correlation and overall
+prediction variance.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-32}
+
+\begin{quote}
+\textbf{random thresholds\\
+↓\\
+}Draw random split threshold t\_j per candidate feature
+
+\textbf{fit extra trees\\
+↓\\
+}Build highly randomized regression trees
+
+\textbf{average ensemble\\
+↓\\
+}Average predictions for robust, low-variance regression
+\end{quote}
+
+\subsection{34. AdaBoostRegressor}\label{adaboostregressor}
+
+\subsubsection{Mental Model}\label{mental-model-33}
+
+Train sequence of weak regression trees, increasing weights of samples
+with large relative error after each stage.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-33}
+
+\textbf{Relative Error: e\_\{im\} = \textbar y\_i - T\_m(x\_i)\textbar{}
+/ Max\_Error\\
+\strut \\
+Ensemble Prediction: Weighted Median of \{T\_m(x)\} using weights
+log(1/β\_m)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-33}
+
+Updates sample weights w\_\{i, m+1\} = w\_\{i, m\} * β\_m\^{}\{(1 -
+e\_\{im\})\} where β\_m = e\_m / (1 - e\_m).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-33}
+
+\begin{quote}
+\textbf{fit weak tree\\
+↓\\
+}Train regression tree T\_m on weighted sample data
+
+\textbf{calculate errors\\
+↓\\
+}Compute relative error e\_\{im\} for each sample
+
+\textbf{weighted median\\
+↓\\
+}Combine tree outputs using weighted median prediction
+\end{quote}
+
+\subsection{35. NuSVR}\label{nusvr}
+
+\subsubsection{Mental Model}\label{mental-model-34}
+
+Automatically control the width of the insensitive error tube ε using
+parameter ν (nu).
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-34}
+
+\textbf{Objective:\\
+min\_\{w,b,ξ,ξ\^{}*,ε\} 0.5 * \textbar\textbar w\textbar\textbar² + C *
+( ν * ε + (1/n) * Σ (ξ\_i + ξ\_i\^{}*) )\\
+\strut \\
+s.t. \textbar y\_i - (w\^{}T φ(x\_i) + b)\textbar{} ≤ ε + ξ\_i}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-34}
+
+Parameter ν ∈ (0, 1{]} bounds the fraction of support vectors and
+automatically determines tube width ε.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-34}
+
+\begin{quote}
+\textbf{nu parameter ν\\
+↓\\
+}Set desired fraction of support vector data points
+
+\textbf{auto tube width ε\\
+↓\\
+}Automatically compute optimal insensitive tube margin ε
+
+\textbf{SMO optimization\\
+↓\\
+}Solve kernelized dual SVR problem via LIBSVM
+\end{quote}
+
+\subsection{36.
+GradientBoostingRegressor}\label{gradientboostingregressor}
+
+\subsubsection{Mental Model}\label{mental-model-35}
+
+Fit decision trees sequentially to the residual errors (gradients) of
+the existing ensemble.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-35}
+
+\textbf{Ensemble Update: F\_m(x) = F\_\{m-1\}(x) + ν * γ\_m * h\_m(x)\\
+\strut \\
+Gradient Residual: r\_\{im\} = - {[} ∂L(y\_i, F(x\_i)) / ∂F(x\_i)
+{]}\_\{F=F\_\{m-1\}\}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-35}
+
+Loss Functions: \textquotesingle squared\_error\textquotesingle{} (MSE),
+\textquotesingle absolute\_error\textquotesingle{} (MAE),
+\textquotesingle huber\textquotesingle,
+\textquotesingle quantile\textquotesingle.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-35}
+
+\begin{quote}
+\textbf{calculate residuals\\
+↓\\
+}Compute error r\_im = y\_i - F\_\{m-1\}(x\_i)
+
+\textbf{fit new tree h\_m\\
+↓\\
+}Train tree h\_m to predict residuals r\_im
+
+\textbf{apply shrinkage ν\\
+↓\\
+}Scale tree output by learning rate ν and add to ensemble
+\end{quote}
+
+\subsection{37. KNeighborsRegressor}\label{kneighborsregressor}
+
+\subsubsection{Mental Model}\label{mental-model-36}
+
+Predict a continuous target by averaging the target values of the K
+nearest neighbors in feature space.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-36}
+
+\textbf{Prediction: f(x) = Σ\_\{i ∈ N\_K(x)\} w\_i * y\_i / Σ w\_i\\
+\strut \\
+w\_i = 1 (Uniform) or w\_i = 1 / d(x, x\_i) (Distance-weighted)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-36}
+
+Uses Minkowski distance d(x, z) = (Σ \textbar x\_j -
+z\_j\textbar\^{}p)\^{}\{1/p\} with KDTree/BallTree search.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-36}
+
+\begin{quote}
+\textbf{find K neighbors\\
+↓\\
+}Locate K nearest training samples by distance
+
+\textbf{weight targets\\
+↓\\
+}Assign weights w\_i based on inverse distance
+
+\textbf{weighted average\\
+↓\\
+}Compute weighted target mean to produce prediction f(x)
+\end{quote}
+
+\subsection{38.
+HistGradientBoostingRegressor}\label{histgradientboostingregressor}
+
+\subsubsection{Mental Model}\label{mental-model-37}
+
+Discretize continuous inputs into integer bins to compute gradient
+histograms rapidly for fast regression tree splits.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-37}
+
+\textbf{Binning: x\_\{binned\} = QuantileBin(x, max\_bins=255)\\
+\strut \\
+Tree Split: Finds bin boundary maximizing loss reduction using
+gradient/hessian sums per bin.}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-37}
+
+Accelerates gradient boosting on large datasets while natively
+supporting missing values.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-37}
+
+\begin{quote}
+\textbf{bin features\\
+↓\\
+}Group continuous feature values into 256 discrete bins
+
+\textbf{sum gradients\\
+↓\\
+}Accumulate gradient \& hessian sums per bin
+
+\textbf{rapid split search\\
+↓\\
+}Scan 256 bin boundaries for optimal split threshold
+\end{quote}
+
+\subsection{39. BaggingRegressor}\label{baggingregressor}
+
+\subsubsection{Mental Model}\label{mental-model-38}
+
+Average continuous outputs from multiple base regressors trained on
+random bootstrap samples.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-38}
+
+\textbf{Bootstrap Samples: B\_1, B\_2, ..., B\_M\\
+\strut \\
+Prediction: f\_\{bag\}(x) = (1/M) * Σ\_\{m=1\}\^{}M h\_m(x)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-38}
+
+Fits base regressor h\_m independently on each random bootstrap data
+subset.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-38}
+
+\begin{quote}
+\textbf{create M samples\\
+↓\\
+}Draw bootstrap random data subsets with replacement
+
+\textbf{fit regressors\\
+↓\\
+}Train independent base regressor on each subset
+
+\textbf{average outputs\\
+↓\\
+}Average predicted values across all M base regressors
+\end{quote}
+
+\subsection{40. MLPRegressor}\label{mlpregressor}
+
+\subsubsection{Mental Model}\label{mental-model-39}
+
+Pass features through hidden neural layers and output a continuous
+prediction via a linear output neuron.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-39}
+
+\textbf{Hidden Layers: h\_1 = f(W\_1 * x + b\_1), h\_2 = f(W\_2 * h\_1 +
+b\_2)\\
+\strut \\
+Linear Output: f(x) = W\_3 * h\_2 + b\_3}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-39}
+
+MSE Loss: L = 0.5 * (1/n) * Σ (y\_i - f(x\_i))² + (α / 2n) * Σ
+\textbar\textbar W\_l\textbar\textbar\_F²\\
+\strut \\
+Optimized via Backpropagation with Adam or L-BFGS.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-39}
+
+\begin{quote}
+\textbf{hidden activations\\
+↓\\
+}Compute non-linear feature representations in hidden layers
+
+\textbf{linear output neuron\\
+↓\\
+}Produce unconstrained continuous target value f(x)
+
+\textbf{MSE loss backprop\\
+↓\\
+}Compute squared error and backpropagate weight updates
+\end{quote}
+
+\subsection{41. HuberRegressor}\label{huberregressor}
+
+\subsubsection{Mental Model}\label{mental-model-40}
+
+Fit a robust linear model that uses squared loss for small errors and
+linear loss for large outlier errors.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-40}
+
+\textbf{Huber Loss Function H\_δ(z):\\
+- 0.5 * z² if \textbar z\textbar{} ≤ δ\\
+- δ * \textbar z\textbar{} - 0.5 * δ² if \textbar z\textbar{}
+\textgreater{} δ}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-40}
+
+min\_\{w, σ\} Σ {[} σ + H\_δ( (y\_i - w\^{}T x\_i) / σ ) * σ {]} + α *
+\textbar\textbar w\textbar\textbar²\_2\\
+\strut \\
+Optimizes weights w and scale parameter σ simultaneously.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-40}
+
+\begin{quote}
+\textbf{small errors (\textbar z\textbar≤δ)\\
+↓\\
+}Behave like MSE (quadratic smooth loss)
+
+\textbf{large errors (\textbar z\textbar\textgreater δ)\\
+↓\\
+}Behave like MAE (linear loss; immune to outlier blowup)
+
+\textbf{scale parameter σ\\
+↓\\
+}Scale residuals dynamically to identify outlier threshold
+\end{quote}
+
+\subsection{42. LinearSVR}\label{linearsvr}
+
+\subsubsection{Mental Model}\label{mental-model-41}
+
+Fit a linear prediction function using ε-insensitive loss solved rapidly
+via LIBLINEAR.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-41}
+
+\textbf{Prediction: f(x) = w\^{}T * x + b\\
+\strut \\
+Loss: L\_ε = max(0, \textbar y\_i - (w\^{}T x\_i + b)\textbar{} - ε)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-41}
+
+min\_\{w,b\} 0.5 * \textbar\textbar w\textbar\textbar² + C * Σ max(0,
+\textbar y\_i - (w\^{}T x\_i + b)\textbar{} - ε)\\
+\strut \\
+Fast linear solver using Coordinate Descent.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-41}
+
+\begin{quote}
+\textbf{linear prediction\\
+↓\\
+}Calculate linear prediction w\^{}T * x + b
+
+\textbf{ε-insensitive loss\\
+↓\\
+}Ignore errors inside ε-tube margin
+
+\textbf{LIBLINEAR solver\\
+↓\\
+}Optimize linear weights fast for large datasets
+\end{quote}
+
+\subsection{43. RidgeCV}\label{ridgecv}
+
+\subsubsection{Mental Model}\label{mental-model-42}
+
+Fit Ridge regression and select the optimal L2 penalty α using efficient
+analytical Leave-One-Out Cross-Validation.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-42}
+
+\textbf{Analytical LOOCV MSE:\\
+LOOCV\_Error(α\_k) = (1/n) * Σ {[} (y\_i - y\_hat\_\{-i\}(α\_k))² {]}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-42}
+
+Computes LOOCV error for all α values simultaneously using SVD
+decomposition without refitting models.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-42}
+
+\begin{quote}
+\textbf{SVD decomposition\\
+↓\\
+}Decompose feature matrix X once via SVD
+
+\textbf{analytical LOOCV\\
+↓\\
+}Compute leave-one-out validation error for all α candidates
+
+\textbf{select optimal α*\\
+↓\\
+}Pick α* with minimal validation MSE and return final weights
+\end{quote}
+
+\subsection{44. BayesianRidge}\label{bayesianridge}
+
+\subsubsection{Mental Model}\label{mental-model-43}
+
+Estimate linear regression parameters probabilistically under Gaussian
+priors, providing prediction uncertainty.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-43}
+
+\textbf{Posterior Distribution: P(w\textbar y, X) \textasciitilde{}
+N(μ\_N, Σ\_N)\\
+\strut \\
+μ\_N = α * Σ\_N * X\^{}T * y, Σ\_N = (λ * I + α * X\^{}T * X)\^{}\{-1\}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-43}
+
+Estimates precision hyperparameters α (noise precision) and λ (weight
+prior precision) via Empirical Bayes (Type-II ML).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-43}
+
+\begin{quote}
+\textbf{gaussian prior\\
+↓\\
+}Assume Gaussian weight prior P(w\textbar λ) = N(0, λ\^{}\{-1\} I)
+
+\textbf{posterior μ\_N, Σ\_N\\
+↓\\
+}Calculate exact posterior weight mean and covariance
+
+\textbf{prediction variance\\
+↓\\
+}Output expected prediction mean and uncertainty variance
+\end{quote}
+
+\subsection{45. Ridge}\label{ridge}
+
+\subsubsection{Mental Model}\label{mental-model-44}
+
+Shrink linear regression coefficients towards zero using an L2 penalty
+to prevent overfitting and handle multicollinearity.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-44}
+
+\textbf{Objective: min\_\{w\} \textbar\textbar y - X
+w\textbar\textbar²\_2 + α * \textbar\textbar w\textbar\textbar²\_2\\
+\strut \\
+Closed-Form Solution: w\^{}* = (X\^{}T * X + α * I)\^{}\{-1\} * X\^{}T *
+y}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-44}
+
+Adds L2 penalty term α * \textbar\textbar w\textbar\textbar² to RSS,
+making (X\^{}T X + α I) invertible even when features are correlated.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-44}
+
+\begin{quote}
+\textbf{residual sum squares\\
+↓\\
+}Minimize prediction error \textbar\textbar y - Xw\textbar\textbar²
+
+\textbf{L2 penalty α*\textbar\textbar w\textbar\textbar²\\
+↓\\
+}Shrink coefficient magnitudes towards zero
+
+\textbf{closed-form matrix\\
+↓\\
+}Solve w\^{}* = (X\^{}T X + α I)\^{}\{-1\} X\^{}T y in one step
+\end{quote}
+
+\subsection{46. LinearRegression}\label{linearregression}
+
+\subsubsection{Mental Model}\label{mental-model-45}
+
+Find the optimal linear hyperplane that minimizes the sum of squared
+distances to all training data points.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-45}
+
+\textbf{Prediction: y\_hat = w\^{}T * x + b\\
+\strut \\
+Objective: min\_\{w\} \textbar\textbar y - X w\textbar\textbar²\_2}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-45}
+
+Closed-Form Ordinary Least Squares (OLS):\\
+w\^{}* = (X\^{}T * X)\^{}\{-1\} * X\^{}T * y\\
+\strut \\
+Computed via Singular Value Decomposition (SVD) of X.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-45}
+
+\begin{quote}
+\textbf{linear combination\\
+↓\\
+}Calculate y\_hat = w\_1 x\_1 + ... + w\_d x\_d + b
+
+\textbf{squared residuals\\
+↓\\
+}Compute sum of squared errors Σ (y\_i - y\_hat\_i)²
+
+\textbf{SVD OLS solver\\
+↓\\
+}Find global minimum weights analytically via SVD
+\end{quote}
+
+\subsection{47.
+TransformedTargetRegressor}\label{transformedtargetregressor}
+
+\subsubsection{Mental Model}\label{mental-model-46}
+
+Transform non-linear target y (e.g., log transformation), train a
+regressor, and inverse-transform predictions back to real scale.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-46}
+
+\textbf{Forward Target Transform: y\_\{trans\} = g(y)\\
+\strut \\
+Fit: Regressor trained on (X, y\_\{trans\})\\
+\strut \\
+Inverse Transform: y\_pred = g\^{}\{-1\}( f(x) )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-46}
+
+Applies forward mapping g during fit() and inverse mapping g\^{}\{-1\}
+during predict().
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-46}
+
+\begin{quote}
+\textbf{transform y -\textgreater{} g(y)\\
+↓\\
+}Apply log / sqrt / custom transform to target y
+
+\textbf{fit base regressor\\
+↓\\
+}Train underlying regressor on transformed target
+
+\textbf{inverse g\^{}\{-1\}(y\_hat)\\
+↓\\
+}Apply inverse transformation to return predictions to real units
+\end{quote}
+
+\subsection{48. LassoCV}\label{lassocv}
+
+\subsubsection{Mental Model}\label{mental-model-47}
+
+Compute the full Lasso L1 regularization path across an α grid and pick
+the best α using K-fold Cross-Validation.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-47}
+
+\textbf{Lasso Path: w(α) computed via Coordinate Descent for α\_1
+\textgreater{} α\_2 \textgreater{} ... \textgreater{} α\_K\\
+\strut \\
+Validation Score: α\^{}* = argmin\_\{α\_k\} (1/K) * Σ\_\{v=1\}\^{}K
+MSE\_\{val\}( α\_k, Fold\_v )}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-47}
+
+Computes entire Lasso regularization path efficiently along an α grid
+using warm-restarted Coordinate Descent.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-47}
+
+\begin{quote}
+\textbf{α grid path\\
+↓\\
+}Generate grid of regularization parameter values α
+
+\textbf{coordinate descent\\
+↓\\
+}Compute sparse Lasso coefficient path w(α)
+
+\textbf{select optimal α*\\
+↓\\
+}Pick α* with minimal cross-validation MSE
+\end{quote}
+
+\subsection{49. ElasticNetCV}\label{elasticnetcv}
+
+\subsubsection{Mental Model}\label{mental-model-48}
+
+Cross-validate over a 2D grid of penalty scale α and L1 ratio to find
+the optimal mix of Lasso and Ridge regularization.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-48}
+
+\textbf{Objective: min\_\{w\} (1/2n) \textbar\textbar y - X
+w\textbar\textbar² + α * {[} l1\_ratio *
+\textbar\textbar w\textbar\textbar\_1 + 0.5 * (1 - l1\_ratio) *
+\textbar\textbar w\textbar\textbar²\_2 {]}\\
+\strut \\
+CV Selection: (α\^{}*, l1\_ratio\^{}*) = argmin CV\_MSE(α, l1\_ratio)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-48}
+
+Performs grid search over combinations of α and l1\_ratio via Coordinate
+Descent.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-48}
+
+\begin{quote}
+\textbf{2D parameter grid\\
+↓\\
+}Set candidate values for α and l1\_ratio
+
+\textbf{coordinate descent\\
+↓\\
+}Fit ElasticNet for each parameter pair across CV folds
+
+\textbf{optimal pair\\
+↓\\
+}Select optimal (α*, l1\_ratio*) with minimum validation error
+\end{quote}
+
+\subsection{50. LassoLarsCV}\label{lassolarscv}
+
+\subsubsection{Mental Model}\label{mental-model-49}
+
+Compute the exact piecewise linear Lasso path using Least Angle
+Regression (LARS) and select α via Cross-Validation.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-49}
+
+\textbf{LARS Lasso Path: Computes exact piecewise linear breakpoints
+where features enter/exit the model.}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-49}
+
+Evaluates cross-validation error along exact LARS breakpoints rather
+than a fixed heuristic grid.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-49}
+
+\begin{quote}
+\textbf{LARS path\\
+↓\\
+}Compute exact piecewise linear Lasso coefficient path
+
+\textbf{cross-validation\\
+↓\\
+}Evaluate prediction error at each path breakpoint
+
+\textbf{select best step\\
+↓\\
+}Pick optimal regularization step along LARS path
+\end{quote}
+
+\subsection{51. LassoLarsIC}\label{lassolarsic}
+
+\subsubsection{Mental Model}\label{mental-model-50}
+
+Select the optimal Lasso parameter α along the LARS path using
+Information Criteria (AIC or BIC) without cross-validation folds.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-50}
+
+\textbf{AIC = n * log(MSE) + 2 * k\\
+\strut \\
+BIC = n * log(MSE) + k * log(n)\\
+\strut \\
+where k = \textbar\textbar w\textbar\textbar\_0 (number of non-zero
+active features)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-50}
+
+Selects optimal step along LARS path in a single training pass using
+analytical AIC or BIC score.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-50}
+
+\begin{quote}
+\textbf{LARS path\\
+↓\\
+}Generate exact piecewise linear feature entry path
+
+\textbf{compute AIC / BIC\\
+↓\\
+}Evaluate information criterion score for each path step
+
+\textbf{instant selection\\
+↓\\
+}Select optimal model without performing K-fold splits
+\end{quote}
+
+\subsection{52. LarsCV}\label{larscv}
+
+\subsubsection{Mental Model}\label{mental-model-51}
+
+Fit Least Angle Regression (LARS) and select the optimal number of steps
+using Cross-Validation.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-51}
+
+\textbf{LARS Feature Direction: Move weights w in direction equiangular
+to features with highest correlation c\_j = x\_j\^{}T (y - y\_hat).}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-51}
+
+Evaluates cross-validation error along the LARS forward path to select
+optimal step count.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-51}
+
+\begin{quote}
+\textbf{equiangular path\\
+↓\\
+}Advance weights equiangularly as features enter active set
+
+\textbf{cross-validation\\
+↓\\
+}Measure out-of-fold MSE along LARS steps
+
+\textbf{select step count\\
+↓\\
+}Choose optimal number of features to retain
+\end{quote}
+
+\subsection{53. Lars}\label{lars}
+
+\subsubsection{Mental Model}\label{mental-model-52}
+
+Stepwise forward feature selection algorithm that advances weight
+coefficients along equiangular correlation directions.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-52}
+
+\textbf{Correlation Vector: c\_j = x\_j\^{}T * (y - y\_hat\_\{k-1\})\\
+\strut \\
+Equiangular Vector: Advance w in direction having equal correlation with
+all active features.}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-52}
+
+Computes entire forward feature selection path in same order of
+computational complexity as a single OLS fit.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-52}
+
+\begin{quote}
+\textbf{start at w=0\\
+↓\\
+}Initialize all weights to zero
+
+\textbf{find max correlation\\
+↓\\
+}Select feature most correlated with current residual
+
+\textbf{move equiangularly\\
+↓\\
+}Advance weights until another feature reaches equal correlation
+\end{quote}
+
+\subsection{54. SGDRegressor}\label{sgdregressor}
+
+\subsubsection{Mental Model}\label{mental-model-53}
+
+Optimize linear regression models iteratively using Stochastic Gradient
+Descent updates on mini-batches.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-53}
+
+\textbf{Gradient Update: w\_\{t+1\} = w\_t - η\_t * {[} (w\_t\^{}T x\_i
+- y\_i) * x\_i + α * ∇R(w\_t) {]}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-53}
+
+Loss Options: \textquotesingle squared\_error\textquotesingle{} (MSE),
+\textquotesingle huber\textquotesingle,
+\textquotesingle epsilon\_insensitive\textquotesingle. Regularization:
+L2, L1, or ElasticNet.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-53}
+
+\begin{quote}
+\textbf{mini-batch sample\\
+↓\\
+}Fetch random sample/batch from training data
+
+\textbf{calculate gradient\\
+↓\\
+}Compute loss gradient ∇L with respect to weights w
+
+\textbf{update weights\\
+↓\\
+}Apply SGD step w\_\{t+1\} = w\_t - η * ∇L
+\end{quote}
+
+\subsection{55. RANSACRegressor}\label{ransacregressor}
+
+\subsubsection{Mental Model}\label{mental-model-54}
+
+Fit a linear model on random subsets of data to separate true inlier
+points from extreme outlier noise.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-54}
+
+\textbf{Inlier Condition: \textbar y\_i - f\_\{sub\}(x\_i)\textbar{} ≤
+t\_\{threshold\}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-54}
+
+Iteratively fits base regressor on random sample subsets, counts
+consensus inliers within threshold t, and refits final model on the
+largest inlier set.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-54}
+
+\begin{quote}
+\textbf{random sample\\
+↓\\
+}Select minimum random data subset to fit trial model
+
+\textbf{count inliers\\
+↓\\
+}Identify all data points falling within residual threshold t
+
+\textbf{largest consensus\\
+↓\\
+}Find subset generating maximum inlier consensus set
+
+\textbf{refit final model\\
+↓\\
+}Re-estimate final regressor weights using inliers only
+\end{quote}
+
+\subsection{56. ElasticNet}\label{elasticnet}
+
+\subsubsection{Mental Model}\label{mental-model-55}
+
+Combine L1 (Lasso) feature selection with L2 (Ridge) grouping penalty to
+handle correlated features while maintaining sparsity.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-55}
+
+\textbf{Objective:\\
+min\_\{w\} (1/2n) * \textbar\textbar y - X w\textbar\textbar²\_2 + α *
+l1\_ratio * \textbar\textbar w\textbar\textbar\_1 + 0.5 * α * (1 -
+l1\_ratio) * \textbar\textbar w\textbar\textbar²\_2}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-55}
+
+Solved via Coordinate Descent using soft-thresholding updates.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-55}
+
+\begin{quote}
+\textbf{L1 penalty\\
+↓\\
+}Enforce sparsity by driving irrelevant feature weights to zero
+
+\textbf{L2 penalty\\
+↓\\
+}Encourage group selection among correlated feature variables
+
+\textbf{coordinate descent\\
+↓\\
+}Iteratively optimize each weight w\_j while holding others fixed
+\end{quote}
+
+\subsection{57. Lasso}\label{lasso}
+
+\subsubsection{Mental Model}\label{mental-model-56}
+
+Apply an L1 absolute weight penalty to shrink unnecessary feature
+coefficients strictly to zero, performing automatic feature selection.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-56}
+
+\textbf{Objective: min\_\{w\} (1/2n) * \textbar\textbar y - X
+w\textbar\textbar²\_2 + α * \textbar\textbar w\textbar\textbar\_1\\
+\strut \\
+Soft-Thresholding Update: w\_j = S( X\_j\^{}T (y - X\_\{-j\} w\_\{-j\}),
+α ) / \textbar\textbar X\_j\textbar\textbar²}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-56}
+
+Solved via Coordinate Descent with Soft-Thresholding operator S(z, α) =
+sgn(z) * max(0, \textbar z\textbar{} - α).
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-56}
+
+\begin{quote}
+\textbf{L1 penalty α*\textbar\textbar w\textbar\textbar\_1\\
+↓\\
+}Add sum of absolute weights to loss function
+
+\textbf{soft-thresholding\\
+↓\\
+}Pull small coefficients to exact zero w\_j = 0
+
+\textbf{sparse feature set\\
+↓\\
+}Produce interpretable model with sparse non-zero coefficients
+\end{quote}
+
+\subsection{58.
+OrthogonalMatchingPursuitCV}\label{orthogonalmatchingpursuitcv}
+
+\subsubsection{Mental Model}\label{mental-model-57}
+
+Cross-validate over the number of non-zero features in Orthogonal
+Matching Pursuit to select optimal feature sparsity.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-57}
+
+\textbf{OMP Path: Solves min \textbar\textbar y - X w\textbar\textbar²
+s.t. \textbar\textbar w\textbar\textbar\_0 ≤ k for k = 1, 2, ...\\
+\strut \\
+CV Selection: k\^{}* = argmin\_k CrossValidation\_MSE(k)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-57}
+
+Selects optimal sparsity parameter k using out-of-fold cross-validation
+error.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-57}
+
+\begin{quote}
+\textbf{OMP path\\
+↓\\
+}Generate greedy sparse feature selection path
+
+\textbf{cross-validation\\
+↓\\
+}Evaluate out-of-fold prediction MSE for feature counts k
+
+\textbf{select sparsity k*\\
+↓\\
+}Choose optimal non-zero feature count k*
+\end{quote}
+
+\subsection{59. ExtraTreeRegressor}\label{extratreeregressor}
+
+\subsubsection{Mental Model}\label{mental-model-58}
+
+Build a single extremely randomized regression tree using uniform random
+split thresholds.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-58}
+
+\textbf{Split Threshold: t\_j \textasciitilde{} Uniform(min(x\_j),
+max(x\_j))\\
+\strut \\
+Leaf Output: Average target value y\_mean in leaf region}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-58}
+
+Draws random thresholds per candidate feature to construct single fast
+randomized regression tree.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-58}
+
+\begin{quote}
+\textbf{random t\_j\\
+↓\\
+}Draw random split threshold for feature candidate
+
+\textbf{variance reduction\\
+↓\\
+}Build fast randomized single regression tree
+
+\textbf{leaf mean\\
+↓\\
+}Output average target value of samples in leaf node
+\end{quote}
+
+\subsection{60.
+PassiveAggressiveRegressor}\label{passiveaggressiveregressor}
+
+\subsubsection{Mental Model}\label{mental-model-59}
+
+Stay passive if prediction error is within threshold ε; aggressively
+update weights if error exceeds ε.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-59}
+
+\textbf{Loss: L\_ε = max(0, \textbar y\_t - w\_t\^{}T x\_t\textbar{} -
+ε)\\
+\strut \\
+Update: w\_\{t+1\} = w\_t + sgn(y\_t - w\_t\^{}T x\_t) * τ\_t * x\_t\\
+\strut \\
+where τ\_t = min(C, L\_ε / \textbar\textbar x\_t\textbar\textbar²)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-59}
+
+Online margin-based continuous regression update rule.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-59}
+
+\begin{quote}
+\textbf{error within ε\\
+↓\\
+}Passive mode: Keep current weights w\_\{t+1\} = w\_t
+
+\textbf{error exceeds ε\\
+↓\\
+}Aggressive mode: Update weights proportional to error loss
+
+\textbf{C bound\\
+↓\\
+}Clip step size τ\_t by C to prevent noisy weight jumps
+\end{quote}
+
+\subsection{61.
+GaussianProcessRegressor}\label{gaussianprocessregressor}
+
+\subsubsection{Mental Model}\label{mental-model-60}
+
+Model target values as a continuous Gaussian Process, providing
+non-parametric predictions with complete uncertainty bounds.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-60}
+
+\textbf{Prior: f(x) \textasciitilde{} GP( m(x), k(x, x\textquotesingle)
+)\\
+\strut \\
+Posterior Mean: μ\^{}* = K(x\^{}*, X) * {[} K(X, X) + σ\_n² I
+{]}\^{}\{-1\} * y\\
+\strut \\
+Posterior Variance: Σ\^{}* = K(x\^{}*, x\^{}*) - K(x\^{}*, X) * {[} K(X,
+X) + σ\_n² I {]}\^{}\{-1\} * K(X, x\^{}*)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-60}
+
+Maximizes Marginal Log-Likelihood to optimize kernel hyperparameters.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-60}
+
+\begin{quote}
+\textbf{kernel covariance K\\
+↓\\
+}Measure similarity between points via kernel k(x, x\textquotesingle)
+
+\textbf{posterior mean μ*\\
+↓\\
+}Compute expected continuous target prediction
+
+\textbf{confidence bounds\\
+↓\\
+}Calculate variance Σ* to output 95\% uncertainty confidence interval
+\end{quote}
+
+\subsection{62.
+OrthogonalMatchingPursuit}\label{orthogonalmatchingpursuit}
+
+\subsubsection{Mental Model}\label{mental-model-61}
+
+Greedy forward feature selection algorithm that selects features most
+correlated with target residuals and projects orthogonally.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-61}
+
+\textbf{Objective: min\_\{w\} \textbar\textbar y - X
+w\textbar\textbar²\_2 s.t. \textbar\textbar w\textbar\textbar\_0 ≤
+n\_nonzero\_coefs\\
+\strut \\
+Residual Update: r\_k = y - X\_\{S\_k\} w\_\{S\_k\}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-61}
+
+At each step, picks feature x\_j most correlated with current residual
+r\_\{k-1\}, adds it to active set S\_k, and projects target orthogonally
+onto X\_\{S\_k\}.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-61}
+
+\begin{quote}
+\textbf{pick max correlated x\_j\\
+↓\\
+}Find feature most correlated with residual vector r
+
+\textbf{add to active set S\\
+↓\\
+}Include feature x\_j in active feature subset
+
+\textbf{orthogonal projection\\
+↓\\
+}Project target y orthogonally onto selected features and update
+residual r
+\end{quote}
+
+\subsection{63. DecisionTreeRegressor}\label{decisiontreeregressor}
+
+\subsubsection{Mental Model}\label{mental-model-62}
+
+Recursively split feature space into rectangular regions and predict the
+mean target value of training samples in each leaf region.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-62}
+
+\textbf{Node MSE: MSE = (1/N) * Σ\_\{i ∈ Region\} (y\_i - y\_mean)²\\
+\strut \\
+Split Optimization: min\_\{j, s\} {[} MSE(Left) + MSE(Right) {]}}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-62}
+
+Finds feature j and threshold s minimizing Mean Squared Error (or MAE)
+recursively until leaf stopping criteria are reached.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-62}
+
+\begin{quote}
+\textbf{test feature splits\\
+↓\\
+}Evaluate thresholds across features to minimize MSE
+
+\textbf{partition region\\
+↓\\
+}Split feature space into left and right sub-regions
+
+\textbf{leaf mean prediction\\
+↓\\
+}Predict average target y\_mean for any sample landing in leaf
+\end{quote}
+
+\subsection{64. DummyRegressor}\label{dummyregressor}
+
+\subsubsection{Mental Model}\label{mental-model-63}
+
+Make simple non-smart baseline predictions (like always predicting
+target mean or median) to benchmark real ML model performance.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-63}
+
+\textbf{Strategy \textquotesingle mean\textquotesingle: y\_pred =
+Mean(Y)\\
+\strut \\
+Strategy \textquotesingle median\textquotesingle: y\_pred = Median(Y)\\
+\strut \\
+Strategy \textquotesingle quantile\textquotesingle: y\_pred =
+Quantile(Y, q)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-63}
+
+Calculates simple summary statistic on training target values Y without
+inspecting input features X.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-63}
+
+\begin{quote}
+\textbf{ignore features X\\
+↓\\
+}Do not inspect input feature columns
+
+\textbf{calculate target summary\\
+↓\\
+}Compute mean or median of target column Y
+
+\textbf{output constant baseline\\
+↓\\
+}Return constant baseline prediction for all inputs
+\end{quote}
+
+\subsection{65. LassoLars}\label{lassolars}
+
+\subsubsection{Mental Model}\label{mental-model-64}
+
+Solve Lasso L1 regularized linear regression along the exact piecewise
+linear Least Angle Regression (LARS) path.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-64}
+
+\textbf{Objective: min\_\{w\} (1/2n) * \textbar\textbar y - X
+w\textbar\textbar²\_2 + α * \textbar\textbar w\textbar\textbar\_1\\
+\strut \\
+LARS Algorithm Variant: Modifies LARS to handle feature drops when
+coefficients hit zero.}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-64}
+
+Computes exact Lasso regularization path in computationally efficient
+LARS steps.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-64}
+
+\begin{quote}
+\textbf{LARS path modification\\
+↓\\
+}Track features entering model and drop features hitting zero weight
+
+\textbf{piecewise linear w(α)\\
+↓\\
+}Compute exact analytical coefficient trajectory
+
+\textbf{exact Lasso weights\\
+↓\\
+}Return sparse weights w for target penalty α
+\end{quote}
+
+\subsection{66. KernelRidge}\label{kernelridge}
+
+\subsubsection{Mental Model}\label{mental-model-65}
+
+Combine L2 regularized Ridge regression with non-linear kernel functions
+to fit smooth non-linear regression curves.
+
+\subsubsection{Mathematical Formulation \&
+Prediction}\label{mathematical-formulation-prediction-65}
+
+\textbf{Dual Objective: min\_\{α\} \textbar\textbar y - K
+α\textbar\textbar²\_2 + γ * α\^{}T * K * α\\
+\strut \\
+Closed-Form Solution: α\^{}* = (K + γ * I)\^{}\{-1\} * y\\
+\strut \\
+Prediction: f(x) = Σ\_\{i=1\}\^{}n α\_i * K(x\_i, x)}
+
+\subsubsection{Optimization \& Loss
+Function}\label{optimization-loss-function-65}
+
+Solves dual kernelized Ridge regression analytically via matrix
+inversion.
+
+\subsubsection{Meaning Breakdown \& Mental
+Flowchart}\label{meaning-breakdown-mental-flowchart-65}
+
+\begin{quote}
+\textbf{kernel matrix K\\
+↓\\
+}Compute non-linear kernel matrix K\_\{ij\} = K(x\_i, x\_j)
+
+\textbf{closed-form dual α*\\
+↓\\
+}Solve α\^{}* = (K + γ I)\^{}\{-1\} y in a single matrix inversion step
+
+\textbf{non-linear prediction\\
+↓\\
+}Evaluate smooth non-linear regression function f(x) = Σ α\_i K(x\_i, x)
+\end{quote}
+
+\section{Chapter 4: Computer Vision \& Deep Learning Mental
+Models}\label{chapter-4-computer-vision-deep-learning-mental-models}
+
+\subsection{4.1 Classic CNNs \& Vision
+Transformers}\label{classic-cnns-vision-transformers}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model / Architecture}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Category}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model \& Core Idea}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Primary Application}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+AlexNet & Classic CNN & Early deep CNN with ReLU and Dropout that
+revolutionized ImageNet classification. & Historical baseline CNN \\
+VGG & Classic CNN & Very deep stack of simple 3x3 convolution filters
+and max pooling layers. & Classic feature extraction \\
+ResNet & Residual CNN & Introduced skip connections (identity shortcuts)
+so 100+ layer networks train smoothly. & Standard visual backbone \\
+DenseNet & Dense CNN & Connects every layer to all subsequent layers to
+maximize feature reuse. & Feature-reuse classification \\
+Inception & Multi-Scale CNN & Runs multi-scale 1x1, 3x3, and 5x5
+convolution filters in parallel in one block. & Multi-scale visual
+patterns \\
+EfficientNet & Compounded CNN & Systematically scales depth, width, and
+resolution using compound coefficient. & High accuracy per compute \\
+ConvNeXt & Modern CNN & Modernized CNN architecture incorporating design
+principles from Vision Transformers. & Modern state-of-art CNN \\
+ViT (Vision Transformer) & Vision Transformer & Splits images into 16x16
+patches and processes them as tokens via self-attention. & Global visual
+relationships \\
+DeiT & Data-Efficient ViT & Uses teacher-student distillation to train
+Transformers efficiently on smaller data. & Data-efficient
+Transformers \\
+Swin Transformer & Hierarchical ViT & Computes self-attention within
+shifted local windows for multi-scale dense prediction. & Object
+detection \& segmentation \\
+DINO / DINOv2 / DINOv3 & Self-Supervised ViT & Self-distillation without
+labels producing rich generic visual features. & Foundation visual
+embeddings \\
+\end{longtable}
+}
+
+\subsection{4.2 Object Detection
+Architectures}\label{object-detection-architectures}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Detector}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Architecture Type}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model \& Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Primary Advantage}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+SSD & One-Stage CNN & Evaluates anchor boxes at multiple conv feature
+map resolutions in one pass. & Fast single-shot detection \\
+YOLO (v1-v10) & One-Stage CNN & Frames detection as a single regression
+grid problem for real-time inference. & Extreme speed \& real-time
+video \\
+Faster R-CNN & Two-Stage CNN & Uses Region Proposal Network (RPN) first,
+then crops and classifies candidate regions. & High spatial detection
+accuracy \\
+RetinaNet & One-Stage CNN & Combines Feature Pyramid Network (FPN) with
+Focal Loss to handle severe background imbalance. & Accurate
+single-stage detection \\
+FCOS & Anchor-Free CNN & Eliminates anchor boxes by predicting bounding
+box offsets directly at center points. & Anchor-free simplicity \\
+DETR & Transformer Detector & Treats detection as a direct set
+prediction problem using Transformer encoder-decoder. & End-to-end
+NMS-free detection \\
+Deformable DETR & Transformer Detector & Focuses self-attention on a
+small set of key sampling locations around reference points. & Fast
+multi-scale convergence \\
+RT-DETR & Real-Time Transformer & First real-time end-to-end Transformer
+object detector balancing speed and accuracy. & Real-time Transformer
+detection \\
+EfficientDet & Efficient Detector & Combines EfficientNet backbone with
+BiFPN multi-scale feature fusion. & Resource-efficient detection \\
+\end{longtable}
+}
+
+\subsection{4.3 Image Segmentation
+Architectures}\label{image-segmentation-architectures}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Segmentation Type}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model \& Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Best Used For}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+FCN & Semantic & Replaces fully-connected layers with deconvolutions for
+dense pixel classification. & First semantic segmentation \\
+U-Net & Semantic & Symmetric U-shaped Encoder-Decoder with skip
+connections preserving spatial details. & Medical \& small dataset
+masks \\
+U-Net++ & Semantic & Enhances U-Net with nested dense skip pathways to
+bridge semantic gap. & High-precision medical masks \\
+DeepLabV3+ & Semantic & Uses Atrous (dilated) Spatial Pyramid Pooling
+(ASPP) to capture multi-scale context. & Complex urban scene
+segmentation \\
+PSPNet & Semantic & Pyramid Scene Parsing network aggregating global
+context across spatial sub-regions. & Large context scene parsing \\
+Mask R-CNN & Instance & Extends Faster R-CNN by adding a parallel branch
+for predicting pixel-level object masks. & Individual instance
+segmentation \\
+YOLACT & Real-Time Instance & Generates prototype masks and predicts
+linear coefficients for rapid real-time masks. & Fast real-time instance
+masks \\
+SegFormer & Semantic Transformer & Lightweight MLP decoder combined with
+hierarchical Transformer encoder. & Efficient Transformer masks \\
+\end{longtable}
+}
+
+\section{Chapter 5: Unsupervised Learning \& Vector
+Mathematics}\label{chapter-5-unsupervised-learning-vector-mathematics}
+
+\subsection{5.1 Distance \& Similarity
+Metrics}\label{distance-similarity-metrics}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Metric}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Formula / Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Best Application}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Cosine Similarity & cos(θ) = (A · B) /
+(\textbar\textbar A\textbar\textbar{}
+\textbar\textbar B\textbar\textbar) & Measures vector directional
+alignment & Text \& visual vector search \\
+Dot Product & A · B = Σ A\_i * B\_i & Measures magnitude and direction
+alignment & Dense embedding retrieval \\
+Euclidean Distance & d = √( Σ (A\_i - B\_i)² ) & Straight-line physical
+distance between points & Standard spatial distance \\
+Manhattan Distance & d = Σ \textbar A\_i - B\_i\textbar{} & Grid
+city-block distance along axes & High-dimensional sparse data \\
+Minkowski Distance & d = ( Σ \textbar A\_i - B\_i\textbar\^{}p
+)\^{}(1/p) & Generalized distance family (p=1 Manhattan, p=2 Euclidean)
+& Parametric distance optimization \\
+Mahalanobis Distance & d = √( (x - μ)\^{}T Σ⁻¹ (x - μ) ) & Distance
+accounting for feature correlations & Outlier detection in multivariate
+data \\
+Chebyshev Distance & d = max\_i \textbar A\_i - B\_i\textbar{} & Maximum
+absolute difference along any single axis & Chess king movement
+metric \\
+Hamming Distance & d = Σ I(A\_i ≠ B\_i) & Counts number of differing
+positions & Binary codes \& string matching \\
+\end{longtable}
+}
+
+\subsection{5.2 Clustering Algorithms}\label{clustering-algorithms}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Algorithm}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Cluster Type}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model \& Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{When to Use?}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+K-Means & Centroid-Based & Assigns points to nearest K centroids and
+updates centroids iteratively. & Known K, spherical clusters \\
+Spherical K-Means & Directional Centroid & Cluster normalized vectors
+using cosine similarity. & Text \& visual embeddings \\
+DBSCAN & Density-Based & Grows clusters from dense neighborhoods; labels
+sparse points as noise. & Arbitrary shapes + noise filtering \\
+HDBSCAN & Hierarchical Density & Extracts flat clusters from density
+hierarchy across varying densities. & Varying density, unknown K \\
+OPTICS & Density Ordering & Orders points to analyze reachability plot
+across multiple density scales. & Complex density structures \\
+Agglomerative & Hierarchical & Bottom-up merging of nearest clusters
+into a hierarchical tree (dendrogram). & Taxonomy \& hierarchical
+groupings \\
+Spectral Clustering & Graph-Based & Computes Laplacian matrix
+eigenvectors and clusters in low-dimensional space. & Complex non-convex
+cluster shapes \\
+Mean Shift & Centroid Shift & Shifts points towards local modes of
+kernel density estimate. & Blob detection, unknown K \\
+GMM & Probabilistic & Fits mixture of K Multivariate Gaussians; provides
+soft probability membership. & Overlapping soft clusters \\
+\end{longtable}
+}
+
+\subsection{5.3 Dimensionality Reduction
+Techniques}\label{dimensionality-reduction-techniques}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Type}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model \& Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Primary Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PCA & Linear Unsupervised & Rotates coordinate axes to directions of
+maximum variance. & Compression \& preprocessing \\
+LDA & Linear Supervised & Projects data to maximize between-class over
+within-class variance. & Supervised dimensionality reduction \\
+t-SNE & Non-linear Manifold & Converts distances to probabilities and
+preserves local neighbor structures. & 2D/3D visual cluster
+exploration \\
+UMAP & Non-linear Manifold & Uses Riemannian geometry to preserve local
++ global manifold structure. & Fast 2D/3D visualization \& ML input \\
+Kernel PCA & Non-linear Kernel & Applies Kernel trick K(x, z) before
+computing principal components. & Non-linear feature extraction \\
+Truncated SVD & Linear Matrix & Performs SVD without centering data;
+works on sparse matrices. & Text TF-IDF \& sparse matrices \\
+Autoencoder & Neural Network & Encoder squeezes input into bottleneck
+code; decoder reconstructs. & Deep non-linear feature compression \\
+\end{longtable}
+}
+
+\end{document}
