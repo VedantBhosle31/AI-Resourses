@@ -20,6 +20,7 @@
 \renewcommand{\familydefault}{\sfdefault}
 
 % Unicode-to-LaTeX mappings for pdfLaTeX compatibility.
+\ifdefined\DeclareUnicodeCharacter
 \DeclareUnicodeCharacter{00B2}{\ensuremath{{}^{2}}}
 \DeclareUnicodeCharacter{00B7}{\ensuremath{\cdot}}
 \DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
@@ -56,6 +57,7 @@
 \DeclareUnicodeCharacter{2260}{\ensuremath{\neq}}
 \DeclareUnicodeCharacter{2264}{\ensuremath{\leq}}
 \DeclareUnicodeCharacter{2265}{\ensuremath{\geq}}
+\fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
@@ -3084,5 +3086,1279 @@ Kernel PCA & Non-linear Kernel & Applies Kernel trick K(x, z) before computing p
 Truncated SVD & Linear Matrix & Performs SVD without centering data; works on sparse matrices. & Text TF-IDF \& sparse matrices \\
 Autoencoder & Neural Network & Encoder squeezes input into bottleneck code; decoder reconstructs. & Deep non-linear feature compression \\
 \end{longtable}
+
+\clearpage
+\hypertarget{chapter-6-time-series-analysis-forecasting}{%
+\section{Chapter 6: Time Series Analysis \& Forecasting}\label{chapter-6-time-series-analysis-forecasting}}
+
+\hypertarget{time-series-fundamentals}{%
+\subsection{6.1 Time Series Fundamentals}\label{time-series-fundamentals}}
+
+A time series is a sequence of observations indexed by time. Unlike ordinary
+tabular data, time-series observations are usually dependent on previous
+observations, making temporal ordering critical.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Definition / Formula}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Time Series & $y_t$ observed at time $t$ & Ordered observations through time & Forecasting and temporal analysis \\
+Trend & Long-term systematic movement in $y_t$ & Overall upward or downward direction & Identify long-term growth or decline \\
+Seasonality & Repeating pattern with fixed period & Pattern repeats every day, week, month, etc. & Capture calendar-based effects \\
+Cycle & Long-term fluctuation without fixed period & Business/economic waves & Model non-fixed periodic behavior \\
+Noise & Random unpredictable component & Irregular variation & Quantify unexplained variation \\
+Level & Baseline value around which observations fluctuate & Current underlying magnitude & Foundation for forecasting \\
+Lag & $y_{t-k}$ & Value from $k$ time steps ago & Represent temporal dependence \\
+Autocorrelation & $\rho_k = \text{Corr}(y_t,y_{t-k})$ & Similarity with past values & Detect temporal dependence \\
+Stationarity & Statistical properties remain stable over time & Same distributional behavior through time & Required by many classical models \\
+White Noise & $\mathbb{E}[\epsilon_t]=0$, constant variance, no autocorrelation & Pure random error & Desired residual behavior \\
+Random Walk & $y_t = y_{t-1}+\epsilon_t$ & Current value = previous value + shock & Baseline non-stationary process \\
+\end{longtable}
+
+\hypertarget{time-series-components}{%
+\subsection{6.2 Components of a Time Series}\label{time-series-components}}
+
+A time series can often be represented using additive or multiplicative
+decomposition.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2800}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Component}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Example}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Trend & Long-term movement & General direction & Increasing sales \\
+Seasonality & Repeating fixed-period pattern & Calendar effect & Higher retail sales every December \\
+Cycle & Non-fixed long-term fluctuation & Economic/business cycle & Recession and recovery \\
+Residual & Remaining unexplained component & Noise after modeling structure & Measurement randomness \\
+\end{longtable}
+
+\textbf{Additive decomposition:}
+
+\[
+y_t = T_t + S_t + R_t
+\]
+
+where $T_t$ is trend, $S_t$ is seasonality, and $R_t$ is the residual.
+
+\textbf{Multiplicative decomposition:}
+
+\[
+y_t = T_t \times S_t \times R_t
+\]
+
+Use additive decomposition when seasonal variation is approximately constant
+and multiplicative decomposition when seasonal variation scales with the
+level of the series.
+
+\hypertarget{time-series-preprocessing}{%
+\subsection{6.3 Time Series Preprocessing}\label{time-series-preprocessing}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Datetime Parsing & Convert timestamps into datetime objects & Make time machine-readable & Correct temporal processing \\
+Sorting & Sort observations chronologically & Put history in correct order & Prevent temporal leakage \\
+Resampling & Aggregate observations to another frequency & Change time resolution & Daily to weekly/monthly data \\
+Missing Value Handling & Imputation, interpolation, forward/backward fill & Repair missing history & Produce continuous series \\
+Outlier Detection & Identify unusually large deviations & Find abnormal observations & Improve model robustness \\
+Rolling Statistics & Mean, variance, etc. over moving windows & Local summary of recent history & Detect trend and changing variance \\
+Lag Features & $y_{t-1},y_{t-2},\ldots$ & Give model historical context & Machine-learning forecasting \\
+Calendar Features & Hour, day, week, month, holiday, etc. & Encode temporal context & Capture systematic patterns \\
+Scaling & Standardization or normalization & Put numerical features on comparable scales & Useful for ML and neural networks \\
+\end{longtable}
+
+\hypertarget{stationarity}{%
+\subsection{6.4 Stationarity}\label{stationarity}}
+
+A stationary time series has statistical properties that do not systematically
+change over time. In weak stationarity, the mean and variance are constant
+and covariance depends primarily on the lag rather than the absolute time:
+
+\[
+\mathbb{E}[y_t] = \mu
+\]
+
+\[
+\text{Var}(y_t) = \sigma^2
+\]
+
+\[
+\text{Cov}(y_t,y_{t-k}) = \gamma_k
+\]
+
+Stationarity is especially important for ARIMA-type models.
+
+\hypertarget{differencing}{%
+\subsubsection{Differencing}\label{differencing}}
+
+First-order differencing is defined as:
+
+\[
+\Delta y_t = y_t-y_{t-1}
+\]
+
+Second-order differencing is:
+
+\[
+\Delta^2 y_t = \Delta y_t-\Delta y_{t-1}
+\]
+
+Differencing removes trend-like non-stationarity.
+
+\hypertarget{seasonal-differencing}{%
+\subsubsection{Seasonal Differencing}\label{seasonal-differencing}}
+
+For seasonal period $s$:
+
+\[
+\Delta_s y_t = y_t-y_{t-s}
+\]
+
+This is useful when a series contains repeating seasonal patterns.
+
+\hypertarget{stationarity-tests}{%
+\subsection{6.5 Stationarity Tests}\label{stationarity-tests}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Test}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Core Idea}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Null Hypothesis}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Interpretation}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ADF Test & Tests for unit root & Series has a unit root & Small $p$-value suggests stationarity \\
+KPSS Test & Tests stationarity around level/trend & Series is stationary & Large $p$-value supports stationarity \\
+Phillips-Perron & Unit-root test robust to serial correlation & Unit root exists & Small $p$-value supports stationarity \\
+\end{longtable}
+
+ADF and KPSS are often used together because their null hypotheses are
+different.
+
+\hypertarget{acf-pacf}{%
+\subsection{6.6 Autocorrelation and Partial Autocorrelation}\label{acf-pacf}}
+
+\textbf{Autocorrelation Function (ACF)} measures correlation between a series
+and its lagged versions:
+
+\[
+\rho_k = \frac{\text{Cov}(y_t,y_{t-k})}{\sqrt{\text{Var}(y_t)\text{Var}(y_{t-k})}}
+\]
+
+\textbf{Partial Autocorrelation Function (PACF)} measures the correlation at
+lag $k$ after removing the effects of intermediate lags.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Tool}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Measures}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Main Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ACF & Correlation with previous lags & Direct temporal dependence & Identify MA order and seasonality \\
+PACF & Direct correlation after intermediate lags are removed & Isolate direct lag effect & Identify AR order \\
+\end{longtable}
+
+\hypertarget{classical-forecasting}{%
+\subsection{6.7 Classical Forecasting Methods}\label{classical-forecasting}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2300}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2300}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Method}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Formula / Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{When to Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Naive Forecast & $\hat{y}_{t+1}=y_t$ & Tomorrow equals today & Strong baseline \\
+Seasonal Naive & $\hat{y}_{t+h}=y_{t+h-s}$ & Repeat previous season & Strong seasonality \\
+Mean Forecast & $\hat{y}_{t+h}=\bar{y}$ & Predict historical average & Stable series \\
+Drift Method & Extends average historical trend & Continue overall direction & Trending series \\
+Moving Average & $\hat{y}_t=\frac{1}{k}\sum_{i=1}^{k}y_{t-i}$ & Average recent history & Smooth short-term noise \\
+Weighted Moving Average & Weighted recent observations & Recent values matter more & Changing local level \\
+Simple Exponential Smoothing & $\hat{y}_{t+1}=\alpha y_t+(1-\alpha)\hat{y}_t$ & Weighted memory of past & Series with level but no strong trend \\
+Holt's Method & Models level and trend & Exponential smoothing with trend & Trending data \\
+Holt-Winters & Models level, trend and seasonality & Exponential smoothing with seasonality & Seasonal forecasting \\
+\end{longtable}
+
+\hypertarget{autoregressive-models}{%
+\subsection{6.8 Autoregressive Models}\label{autoregressive-models}}
+
+An autoregressive model predicts the current value using previous observations:
+
+\[
+y_t = c+\phi_1y_{t-1}+\phi_2y_{t-2}+\cdots+\phi_py_{t-p}+\epsilon_t
+\]
+
+This is an AR($p$) model.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+AR(1) & Uses one previous value & Depend on yesterday & Simple temporal dependence \\
+AR($p$) & Uses $p$ previous values & Memory of recent history & Autoregressive forecasting \\
+\end{longtable}
+
+\hypertarget{moving-average-models}{%
+\subsection{6.9 Moving Average Models}\label{moving-average-models}}
+
+A Moving Average model predicts the current observation using previous error
+terms rather than previous observations:
+
+\[
+y_t = c+\epsilon_t+\theta_1\epsilon_{t-1}+\theta_2\epsilon_{t-2}+\cdots+\theta_q\epsilon_{t-q}
+\]
+
+This is an MA($q$) model.
+
+\hypertarget{arma}{%
+\subsection{6.10 ARMA}\label{arma}}
+
+ARMA combines autoregressive and moving-average components:
+
+\[
+y_t = c+\sum_{i=1}^{p}\phi_i y_{t-i}+\epsilon_t+\sum_{j=1}^{q}\theta_j\epsilon_{t-j}
+\]
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Components}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Requirement}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+AR & Past observations & Memory of values & Stationary series \\
+MA & Past errors & Memory of shocks & Stationary series \\
+ARMA & Past observations + past errors & Combined memory & Stationary series \\
+\end{longtable}
+
+\hypertarget{arima}{%
+\subsection{6.11 ARIMA}\label{arima}}
+
+ARIMA stands for Autoregressive Integrated Moving Average:
+
+\[
+\text{ARIMA}(p,d,q)
+\]
+
+where:
+\begin{itemize}
+\item $p$ = autoregressive order,
+\item $d$ = number of differences,
+\item $q$ = moving-average order.
+\end{itemize}
+
+The model first differences the series $d$ times to achieve stationarity and
+then applies AR and MA components.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2800}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2600}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Parameter}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Meaning}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Typical Diagnostic}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+$p$ & AR order & PACF & How many past values matter \\
+$d$ & Differencing order & Stationarity tests & How much trend must be removed \\
+$q$ & MA order & ACF & How many past errors matter \\
+\end{longtable}
+
+\hypertarget{sarima}{%
+\subsection{6.12 Seasonal ARIMA (SARIMA)}\label{sarima}}
+
+SARIMA extends ARIMA by explicitly modeling seasonal behavior:
+
+\[
+\text{SARIMA}(p,d,q)(P,D,Q)_s
+\]
+
+where $P$, $D$, and $Q$ are seasonal AR, differencing, and MA orders, and
+$s$ is the seasonal period.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1800}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Parameter}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Meaning}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Example}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+$p$ & Non-seasonal AR order & 2 & Recent observations \\
+$d$ & Non-seasonal differencing & 1 & Remove trend \\
+$q$ & Non-seasonal MA order & 1 & Past shocks \\
+$P$ & Seasonal AR order & 1 & Seasonal memory \\
+$D$ & Seasonal differencing & 1 & Remove seasonal non-stationarity \\
+$Q$ & Seasonal MA order & 1 & Seasonal shocks \\
+$s$ & Seasonal period & 12 for monthly data & Define season length \\
+\end{longtable}
+
+\hypertarget{var}{%
+\subsection{6.13 Vector Autoregression (VAR)}\label{var}}
+
+VAR models multiple interacting time series simultaneously:
+
+\[
+\mathbf{y}_t = \mathbf{c} + A_1\mathbf{y}_{t-1} + A_2\mathbf{y}_{t-2} + \cdots + A_p\mathbf{y}_{t-p} + \boldsymbol{\epsilon}_t
+\]
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+VAR & Multiple time series predict each other & Interacting temporal system & Multivariate forecasting \\
+VARMA & VAR + moving-average errors & Multivariate ARMA & Complex multivariate series \\
+VARMAX & VAR with exogenous variables & Multiple series + external drivers & Forecasting with additional predictors \\
+\end{longtable}
+
+\hypertarget{exponential-smoothing}{%
+\subsection{6.14 Exponential Smoothing Family}\label{exponential-smoothing}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2300}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Method}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Components}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+SES & Level & Recent observations weighted more heavily & No trend or seasonality \\
+Holt & Level + trend & Exponentially weighted trend & Trending series \\
+Holt-Winters Additive & Level + trend + additive seasonality & Constant seasonal amplitude & Additive seasonality \\
+Holt-Winters Multiplicative & Level + trend + multiplicative seasonality & Seasonal amplitude scales with level & Multiplicative seasonality \\
+\end{longtable}
+
+\hypertarget{state-space-models}{%
+\subsection{6.15 State Space Models}\label{state-space-models}}
+
+State space models represent a time series using hidden states that evolve
+through time:
+
+\[
+\mathbf{x}_t = F\mathbf{x}_{t-1}+\mathbf{w}_t
+\]
+
+\[
+\mathbf{y}_t = H\mathbf{x}_t+\mathbf{v}_t
+\]
+
+where $\mathbf{x}_t$ is the latent state, $\mathbf{y}_t$ is the observed
+measurement, and $\mathbf{w}_t,\mathbf{v}_t$ represent process and observation
+noise.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Application}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+State Space Model & Hidden state + observation equation & Hidden system generates observations & Dynamic systems \\
+Kalman Filter & Recursive state estimation & Continuously update belief from new observations & Tracking and filtering \\
+Kalman Smoother & Uses future observations to refine past states & Look backward with full information & State estimation \\
+\end{longtable}
+
+\hypertarget{prophet-models}{%
+\subsection{6.16 Prophet-Style Decomposition Models}\label{prophet-models}}
+
+Modern additive forecasting frameworks decompose a series into interpretable
+components:
+
+\[
+y(t)=g(t)+s(t)+h(t)+\epsilon_t
+\]
+
+where:
+\begin{itemize}
+\item $g(t)$ represents trend,
+\item $s(t)$ represents seasonality,
+\item $h(t)$ represents holiday or event effects,
+\item $\epsilon_t$ represents noise.
+\end{itemize}
+
+These models are particularly useful for business time series containing
+multiple seasonalities, trend changes, holidays, and missing observations.
+
+\hypertarget{fourier-features}{%
+\subsection{6.17 Fourier Features}\label{fourier-features}}
+
+Periodic patterns can be represented using sine and cosine functions:
+
+\[
+y_t = \beta_0+\sum_{k=1}^{K}\left[a_k\sin\left(\frac{2\pi kt}{m}\right)+b_k\cos\left(\frac{2\pi kt}{m}\right)\right]+\epsilon_t
+\]
+
+where $m$ is the seasonal period and $K$ controls the number of Fourier terms.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Fourier Terms & Sine/cosine basis functions & Encode repeating cycles & Multiple or long seasonal periods \\
+Seasonal Harmonics & Multiple Fourier frequencies & Capture complex seasonal shape & Smooth seasonal patterns \\
+\end{longtable}
+
+\hypertarget{ml-time-series}{%
+\subsection{6.18 Machine Learning for Time Series}\label{ml-time-series}}
+
+Time series can be converted into supervised-learning problems using lag,
+rolling, calendar, and external features.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Algorithm}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{When to Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Linear Regression & Predicts target from lag and external features & Weighted combination of predictors & Simple interpretable forecasting \\
+Ridge Regression & Linear regression + L2 regularization & Shrinks correlated coefficients & Many correlated lag features \\
+Lasso Regression & Linear regression + L1 regularization & Selects useful features & Sparse feature selection \\
+Elastic Net & L1 + L2 regularization & Combination of shrinkage and selection & High-dimensional lag features \\
+Random Forest & Ensemble of decision trees & Many trees vote together & Non-linear forecasting relationships \\
+Gradient Boosting & Sequentially improves weak learners & Each tree fixes previous errors & Strong tabular forecasting baseline \\
+XGBoost & Optimized gradient boosting & Regularized high-performance boosting & Production forecasting with engineered features \\
+LightGBM & Histogram-based gradient boosting & Fast tree boosting & Large-scale forecasting \\
+CatBoost & Ordered boosting with categorical handling & Robust boosting with categorical features & Time series with categorical variables \\
+\end{longtable}
+
+\hypertarget{deep-learning-time-series}{%
+\subsection{6.19 Deep Learning for Time Series}\label{deep-learning-time-series}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2300}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Architecture}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Application}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+MLP & Feed-forward network over engineered temporal features & Non-linear feature mapping & Basic neural forecasting \\
+RNN & Recurrently processes sequential observations & Hidden memory state & Sequential dependencies \\
+LSTM & RNN with gated memory cells & Long-term memory with controlled forgetting & Long temporal dependencies \\
+GRU & Simplified gated recurrent network & Compact LSTM alternative & Efficient sequence modeling \\
+1D CNN & Convolution over temporal windows & Detect local temporal patterns & Signal and sequence forecasting \\
+TCN & Dilated causal convolutions & Large temporal receptive field without recurrence & Long sequence modeling \\
+Seq2Seq & Encoder-decoder architecture & Encode history and generate future sequence & Multi-step forecasting \\
+Transformer & Self-attention over sequence positions & Learn relationships between time steps & Long-range temporal dependencies \\
+Temporal Fusion Transformer & Attention + variable selection + recurrent/temporal components & Interpretable multi-horizon forecasting & Complex multivariate forecasting \\
+N-BEATS & Deep residual blocks specialized for forecasting & Learn basis functions for trend/seasonality & Univariate forecasting \\
+N-HiTS & Hierarchical interpolation for forecasting & Predict multiple temporal resolutions & Long-horizon forecasting \\
+\end{longtable}
+
+\hypertarget{transformers-time-series}{%
+\subsection{6.20 Attention and Transformers for Time Series}\label{transformers-time-series}}
+
+Self-attention is based on:
+
+\[
+\text{Attention}(Q,K,V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+\]
+
+where $Q$, $K$, and $V$ represent query, key, and value matrices.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Self-Attention & Each time step attends to other time steps & Learn temporal relationships & Long-range dependencies \\
+Multi-Head Attention & Multiple attention projections & Several temporal relationships simultaneously & Rich temporal representations \\
+Causal Attention & Prevents access to future observations & Only use available history & Autoregressive forecasting \\
+Positional Encoding & Adds temporal position information & Tell model where a value occurs & Preserve temporal order \\
+\end{longtable}
+
+\hypertarget{multivariate-time-series}{%
+\subsection{6.21 Multivariate Time Series}\label{multivariate-time-series}}
+
+A multivariate time series contains multiple variables observed over time.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Definition}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Univariate & One variable through time & One signal & Single-series forecasting \\
+Multivariate & Multiple variables through time & Interacting signals & Complex forecasting \\
+Exogenous Variable & External predictor $X_t$ & Outside information influencing target & Weather, price, promotions \\
+Cross-Correlation & Correlation between different series at different lags & How one series relates to another over time & Feature selection and causality analysis \\
+\end{longtable}
+
+\hypertarget{granger-causality}{%
+\subsection{6.22 Granger Causality}\label{granger-causality}}
+
+Granger causality tests whether historical values of one variable provide
+useful predictive information for another variable.
+
+If $X$ helps predict $Y$ beyond the information contained in the historical
+values of $Y$, then $X$ is said to Granger-cause $Y$:
+
+\[
+Y_t = \sum_i a_i Y_{t-i} + \sum_j b_j X_{t-j} + \epsilon_t
+\]
+
+A significant contribution from the $X$ terms suggests predictive causality,
+but it should not be interpreted as proof of real-world causal mechanisms.
+
+\hypertarget{cointegration}{%
+\subsection{6.23 Cointegration}\label{cointegration}}
+
+Two non-stationary series may have a stationary linear combination. Such
+series are said to be cointegrated:
+
+\[
+z_t = y_t-\beta x_t
+\]
+
+If $y_t$ and $x_t$ are individually non-stationary but $z_t$ is stationary,
+the variables may share a long-run equilibrium relationship.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Engle-Granger Test & Tests residual-based cointegration & Check whether combination becomes stationary & Two-series cointegration \\
+Johansen Test & Multivariate cointegration test & Find number of cointegrating relationships & Multiple time series \\
+VECM & Vector Error Correction Model & Short-run dynamics + long-run equilibrium & Cointegrated multivariate series \\
+\end{longtable}
+
+\hypertarget{time-series-cross-validation}{%
+\subsection{6.24 Time Series Cross-Validation}\label{time-series-cross-validation}}
+
+Random train-test splitting is generally inappropriate for forecasting because
+it can allow information from the future to enter the training process.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Method}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Holdout Split & Earlier observations train, later observations test & Simulate future prediction & Basic evaluation \\
+Expanding Window & Training set continually grows & Learn from all available history & Forecasting validation \\
+Rolling Window & Training window moves forward & Fixed amount of recent history & Non-stationary environments \\
+Walk-Forward Validation & Train, predict next period, move forward & Repeatedly simulate deployment & Realistic forecasting evaluation \\
+Blocked Time Series CV & Sequential non-overlapping validation blocks & Preserve temporal ordering & Robust model comparison \\
+\end{longtable}
+
+\hypertarget{forecasting-horizons}{%
+\subsection{6.25 Forecasting Horizons}\label{forecasting-horizons}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Type}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Definition}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Example}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Challenge}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+One-Step Forecast & Predict next time step & Tomorrow's demand & Short-term uncertainty \\
+Multi-Step Recursive & Predict one step repeatedly using predictions & Forecast next 30 days & Errors accumulate \\
+Direct Multi-Step & Separate model for each horizon & One model per future day & More models to train \\
+Multi-Output & One model predicts all future steps & Predict entire horizon simultaneously & More complex output \\
+\end{longtable}
+
+\hypertarget{forecast-uncertainty}{%
+\subsection{6.26 Forecast Uncertainty and Prediction Intervals}\label{forecast-uncertainty}}
+
+A point forecast provides a single expected value, while a prediction
+interval provides a range representing forecast uncertainty:
+
+\[
+\hat{y}_{t+h}\pm z_{\alpha/2}\sigma_h
+\]
+
+where $\sigma_h$ is the forecast standard deviation at horizon $h$.
+
+Uncertainty generally increases as the forecast horizon becomes longer.
+
+\hypertarget{forecast-evaluation}{%
+\subsection{6.27 Forecast Evaluation Metrics}\label{forecast-evaluation}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1800}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3600}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Metric}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Formula}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Best Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+MAE & $\frac{1}{n}\sum |y_i-\hat{y}_i|$ & Average absolute error & Robust, interpretable error \\
+MSE & $\frac{1}{n}\sum (y_i-\hat{y}_i)^2$ & Penalizes large errors & Optimization \\
+RMSE & $\sqrt{\text{MSE}}$ & Error in original units & Forecast comparison \\
+MAPE & $\frac{100}{n}\sum \left|\frac{y_i-\hat{y}_i}{y_i}\right|$ & Percentage error & Scale-independent evaluation \\
+sMAPE & $\frac{100\%}{n}\sum \frac{|y_i - \hat{y}_i|}{(|y_i| + |\hat{y}_i|)/2}$ & Symmetric percentage error & Comparing different scales \\
+WAPE & $\frac{\sum |y_i-\hat{y}_i|}{\sum |y_i|}$ & Weighted absolute percentage error & Demand forecasting \\
+MASE & $\frac{\text{MAE}}{\text{MAE}_{\text{naive}}}$ & Scaled MAE relative to naive forecast & Cross-series comparison \\
+RMSLE & $\sqrt{\frac{1}{n}\sum (\log(1+\hat{y}_i)-\log(1+y_i))^2}$ & Penalizes relative differences & Positive skewed targets \\
+\end{longtable}
+
+\hypertarget{residual-analysis}{%
+\subsection{6.28 Residual Analysis}\label{residual-analysis}}
+
+A good forecasting model should leave residuals that resemble white noise:
+
+\[
+e_t=y_t-\hat{y}_t
+\]
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2800}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Diagnostic}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{What to Check}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Desired Result}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Problem Indicated}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Residual Mean & Average error & Approximately zero & Systematic bias \\
+Residual Variance & Error spread & Approximately constant & Heteroscedasticity \\
+Residual ACF & Autocorrelation & No significant correlation & Uncaptured temporal structure \\
+Residual Distribution & Shape of errors & Approximately well-behaved & Non-Gaussian errors may affect inference \\
+Ljung-Box Test & Joint autocorrelation test & Large $p$-value & Significant residual autocorrelation if rejected \\
+\end{longtable}
+
+\hypertarget{volatility-models}{%
+\subsection{6.29 Heteroscedasticity and Volatility Models}\label{volatility-models}}
+
+When the variance of a time series changes over time, volatility models can
+be used.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Application}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ARCH & Models conditional variance using past squared errors & Volatility depends on previous shocks & Financial returns \\
+GARCH & Models variance using past shocks and past variance & Volatility has memory & Financial volatility \\
+EGARCH & Log-volatility model & Handles asymmetric volatility effects & Leverage effects \\
+GJR-GARCH & Adds asymmetric shock response & Negative and positive shocks can differ & Equity volatility \\
+\end{longtable}
+
+A basic GARCH($p,q$) model can be represented as:
+
+\[
+\sigma_t^2 = \omega+\sum_{i=1}^{q}\alpha_i\epsilon_{t-i}^2+\sum_{j=1}^{p}\beta_j\sigma_{t-j}^2
+\]
+
+\hypertarget{change-point-detection}{%
+\subsection{6.30 Change Point Detection}\label{change-point-detection}}
+
+Change point detection identifies times when the statistical behavior of a
+series changes.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Method}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Use}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+CUSUM & Accumulates deviations from expected behavior & Detect persistent shifts & Process monitoring \\
+PELT & Penalized optimization for multiple change points & Efficient segmentation & Large time series \\
+Binary Segmentation & Recursively splits series at detected changes & Divide and conquer & Multiple regime changes \\
+Bayesian Change Point & Estimates probability of changes & Probabilistic regime detection & Uncertainty-aware analysis \\
+\end{longtable}
+
+\hypertarget{time-series-anomaly-detection}{%
+\subsection{6.31 Anomaly Detection in Time Series}\label{time-series-anomaly-detection}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Method}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mechanism}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Application}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Z-Score & Measures standard deviations from mean & How unusual is this value? & Simple anomaly detection \\
+IQR Method & Uses quartile-based thresholds & Detect extreme observations & Robust outlier detection \\
+Isolation Forest & Randomly isolates unusual observations & Anomalies are easier to isolate & Multivariate anomaly detection \\
+One-Class SVM & Learns boundary around normal observations & Separate normal from abnormal & Novelty detection \\
+Autoencoder & Learns to reconstruct normal patterns & Poor reconstruction indicates anomaly & Complex temporal anomalies \\
+Forecast-Based Detection & Flag unusually large forecast residuals & Unexpected relative to predicted value & Operational monitoring \\
+\end{longtable}
+
+\hypertarget{frequency-domain-analysis}{%
+\subsection{6.32 Frequency-Domain Analysis}\label{frequency-domain-analysis}}
+
+Time-domain analysis studies values over time, while frequency-domain analysis
+studies repeating frequencies within the signal.
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Fourier Transform & Converts time-domain signal into frequency components & Find hidden cycles & Periodicity analysis \\
+FFT & Fast algorithm for Fourier Transform & Efficient frequency decomposition & Signal processing \\
+Periodogram & Estimates power across frequencies & Which frequencies contain energy? & Detect dominant cycles \\
+Spectral Density & Distribution of signal power over frequency & Frequency fingerprint & Signal characterization \\
+Wavelet Transform & Localized time-frequency representation & Analyze frequency that changes through time & Non-stationary signals \\
+\end{longtable}
+
+\hypertarget{causality-temporal}{%
+\subsection{6.33 Causality and Temporal Relationships}\label{causality-temporal}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Technique}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Concept}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Cross-Correlation & Correlation between two series at different lags & Find delayed relationships & Lag discovery \\
+Granger Causality & Tests predictive contribution of another series & Does past $X$ improve prediction of $Y$? & Predictive causality \\
+Impulse Response & Tracks response of a system to a shock & What happens after a sudden change? & VAR interpretation \\
+Forecast Error Variance Decomposition & Attributes forecast variance to different shocks & Which variable explains uncertainty? & Multivariate interpretation \\
+\end{longtable}
+
+\hypertarget{time-series-feature-engineering}{%
+\subsection{6.34 Time Series Feature Engineering}\label{time-series-feature-engineering}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Feature}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Example}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Lag Features & $y_{t-1},y_{t-7},y_{t-30}$ & Historical memory & Autoregressive information \\
+Rolling Mean & $\text{mean}(y_{t-k:t})$ & Recent local level & Smooth signal \\
+Rolling Std & $\text{std}(y_{t-k:t})$ & Recent volatility & Capture changing variance \\
+Rolling Min/Max & Minimum or maximum over window & Recent extremes & Demand and risk features \\
+Expanding Mean & Mean from beginning to current point & Long-term average & Historical baseline \\
+Difference Features & $y_t-y_{t-k}$ & Recent change & Momentum and trend \\
+Percentage Change & $\frac{y_t-y_{t-k}}{y_{t-k}}$ & Relative change & Growth rate \\
+Calendar Features & Hour, weekday, month, quarter & Temporal context & Seasonality \\
+Holiday Features & Holiday indicator & Event effect & Special-day patterns \\
+Fourier Features & Sine/cosine seasonal terms & Smooth periodic encoding & Long seasonal patterns \\
+External Features & Weather, price, promotions & Outside drivers & Causal/predictive context \\
+\end{longtable}
+
+\hypertarget{time-series-leakage}{%
+\subsection{6.35 Time Series Leakage}\label{time-series-leakage}}
+
+Temporal leakage occurs when information that would not have been available at
+prediction time is used during training.
+
+Common examples include:
+
+\begin{itemize}
+\item Randomly shuffling time-series observations before splitting.
+\item Computing rolling statistics using future observations.
+\item Scaling the complete dataset before creating a chronological split.
+\item Using future target values to construct features.
+\item Performing interpolation using observations from the future.
+\end{itemize}
+
+The fundamental rule is:
+
+\[
+\boxed{\text{Features at time }t\text{ must only use information available at or before }t}
+\]
+
+\hypertarget{forecasting-strategy-selection}{%
+\subsection{6.36 Forecasting Strategy Selection}\label{forecasting-strategy-selection}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2100}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Data Situation}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Recommended Models}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Mental Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Priority}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Stable level & Naive, SES & Recent level predicts future & Simple baseline \\
+Strong trend & Holt, ARIMA, Gradient Boosting & Continue learned trend & Trend modeling \\
+Strong seasonality & Holt-Winters, SARIMA, Fourier features & Repeat seasonal structure & Seasonal forecasting \\
+Many external variables & XGBoost, LightGBM, CatBoost, TFT & Learn nonlinear relationships & Feature-rich forecasting \\
+Long temporal dependencies & LSTM, TCN, Transformer & Learn long memory & Deep sequence modeling \\
+Multiple interacting series & VAR, VECM, TFT, Transformers & Variables influence each other & Multivariate forecasting \\
+Changing volatility & ARCH, GARCH & Model conditional variance & Financial forecasting \\
+Unknown structural changes & Change-point models, HDBSCAN-style segmentation, state-space models & Detect regimes & Regime-aware forecasting \\
+Small dataset & Naive, ETS, ARIMA, SARIMA & Statistical assumptions help & Classical forecasting \\
+Large dataset & Boosting, deep learning, Transformers & Learn complex patterns & Scalable ML forecasting \\
+\end{longtable}
+
+\hypertarget{time-series-workflow}{%
+\subsection{6.37 End-to-End Time Series Workflow}\label{time-series-workflow}}
+
+A practical forecasting pipeline can be summarized as:
+
+\[
+\boxed{
+\begin{gathered}
+\text{Collect} \rightarrow \text{Sort} \rightarrow \text{Clean} \rightarrow \text{Explore} \rightarrow \text{Decompose} \rightarrow \text{Test Stationarity} \rightarrow \text{Feature Engineer} \\
+\rightarrow \text{Split Chronologically} \rightarrow \text{Baseline} \rightarrow \text{Train} \rightarrow \text{Validate} \rightarrow \text{Diagnose} \rightarrow \text{Forecast}
+\end{gathered}
+}
+\]
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2200}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.3400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2400}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Stage}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Key Activities}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Main Tools}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Goal}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1. Data Preparation & Parse timestamps, sort, handle missing values & Pandas, Polars & Clean chronological dataset \\
+2. Exploration & Plot series, rolling statistics, ACF/PACF & Visualization, statistics & Understand temporal structure \\
+3. Decomposition & Trend, seasonality, residual analysis & STL, classical decomposition & Separate components \\
+4. Stationarity & ADF, KPSS, differencing & Statistical tests & Determine integration requirements \\
+5. Feature Engineering & Lags, rolling statistics, calendar and Fourier features & Pandas, feature pipelines & Create predictive information \\
+6. Baseline & Naive, seasonal naive, moving average & Simple forecasting models & Establish benchmark \\
+7. Model Training & ARIMA, SARIMA, ETS, ML, deep learning & Statistical/ML frameworks & Learn forecasting relationship \\
+8. Validation & Walk-forward or expanding-window validation & Time-series CV & Estimate future performance \\
+9. Diagnostics & Residual ACF, Ljung-Box, error analysis & Statistical diagnostics & Verify model assumptions \\
+10. Forecasting & Point forecasts and prediction intervals & Selected model & Predict future values \\
+11. Monitoring & Track errors, drift and anomalies & Monitoring pipeline & Maintain production accuracy \\
+\end{longtable}
+
+\hypertarget{time-series-algorithm-selection}{%
+\subsection{6.38 Quick Algorithm Selection Guide}\label{time-series-algorithm-selection}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3400}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3200}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Question}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Preferred Starting Point}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Reason}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Do I need a simple baseline? & Naive / Seasonal Naive & Extremely difficult to beat on some series \\
+Is there trend but little seasonality? & Holt / ARIMA & Explicit trend modeling \\
+Is there strong seasonality? & Holt-Winters / SARIMA & Explicit seasonal structure \\
+Is the data non-stationary? & Differencing / ARIMA / SARIMA & Remove temporal non-stationarity \\
+Are there many external features? & Gradient Boosting & Strong nonlinear tabular learner \\
+Are there many correlated series? & VAR / VECM / multivariate neural models & Model cross-series relationships \\
+Do I need probabilistic forecasts? & ETS / State Space / probabilistic neural models & Produce uncertainty estimates \\
+Are there structural breaks? & Change-point / state-space methods & Explicitly model regime changes \\
+Is the dataset very large? & Boosting / deep learning / Transformers & Scale to complex datasets \\
+Do I need interpretability? & Naive / ETS / ARIMA / linear regression & Transparent model structure \\
+Do I need long-horizon deep forecasting? & TFT / N-BEATS / N-HiTS / Transformers & Designed for multi-horizon prediction \\
+\end{longtable}
+
+\hypertarget{key-time-series-concepts-to-remember}{%
+\subsection{6.39 Key Time Series Concepts to Remember}\label{key-time-series-concepts-to-remember}}
+
+\begin{itemize}
+\item \textbf{Trend} describes long-term direction.
+\item \textbf{Seasonality} describes repeating fixed-period behavior.
+\item \textbf{Stationarity} means the statistical behavior of the series is stable through time.
+\item \textbf{ACF} measures correlation with lagged observations.
+\item \textbf{PACF} measures direct lag relationships after accounting for intermediate lags.
+\item \textbf{AR} models depend on previous observations.
+\item \textbf{MA} models depend on previous forecast errors.
+\item \textbf{ARIMA} combines autoregression, differencing, and moving average.
+\item \textbf{SARIMA} adds explicit seasonal components to ARIMA.
+\item \textbf{ETS/Holt-Winters} models level, trend, and seasonality through exponential smoothing.
+\item \textbf{VAR} models multiple interacting time series.
+\item \textbf{GARCH} models changing conditional variance.
+\item \textbf{Granger causality} concerns predictive usefulness, not proof of true causation.
+\item \textbf{Cointegration} describes long-run equilibrium relationships between non-stationary series.
+\item \textbf{Walk-forward validation} preserves the temporal structure of the forecasting problem.
+\item \textbf{Data leakage} occurs when future information enters the training process.
+\item \textbf{Residuals should ideally resemble white noise} after a good forecasting model has captured the systematic structure.
+\end{itemize}
 
 \end{document}
